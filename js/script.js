@@ -64,14 +64,14 @@ $(function(){
         }
     });
 
-    $('#calc_cannons').on('click', function(){
-        var cannonIon = parseInt($('#cannon_ion').html()) || 0,
-            cannonPlasma = parseInt($('#cannon_plasma').html()) || 0,
-            cannonAntimatter = parseInt($('#cannon_antimatter').html()) || 0,
-            computer = parseInt($('#computer').html()) || 0;
+    $('#cannons_calc').on('click', function(){
+        var cannonsIon = parseInt($('#cannons_ion').html()) || 0,
+            cannonsPlasma = parseInt($('#cannons_plasma').html()) || 0,
+            cannonsAntimatter = parseInt($('#cannons_antimatter').html()) || 0,
+            cannonsComputer = parseInt($('#cannons_computer').html()) || 0;
 
-        var probability = ((computer > 4 ? 4 : computer) + 1) / 6,
-            calc = calcDicesMulti(cannonIon, cannonPlasma, cannonAntimatter, probability),
+        var probability = ((cannonsComputer > 4 ? 4 : cannonsComputer) + 1) / 6,
+            calc = calcDicesMulti(cannonsIon, cannonsPlasma, cannonsAntimatter, probability),
             html = '';
 
         html += '<table class="table table-striped table-align-center">';
@@ -79,29 +79,29 @@ $(function(){
         html += '<tbody>';
         for (var i in calc) {
             html += '<tr>';
-            html += '<td>' + i + '</td>';
+            html += '<td>' + (i > 0 ? '&ge; ' : '= ') + i + '</td>';
             html += '<td>' + (calc[i] < 0.1 ? '0' : '') + round(calc[i] * 100, 3).toFixed(3) + '%</td>';
             html += '</tr>';
         }
         html += '</tbody></table>';
 
-        $('#calc_cannons_result').html(html);
+        $('#cannons_result').html(html);
     });
 
-    var throwDices = 0, dicePause = 1000, throwPause = 3000;
-    $('#throw_dices').on('click', function(){
-        var pause = dicePause + throwPause;
-        if (throwDices > (new Date()).getTime()) {
+    var dicesThrow = 0, dicesPause = 1000, dicesThrowPause = 3000;
+    $('#dices_throw').on('click', function(){
+        var pause = dicesPause + dicesThrowPause;
+        if (dicesThrow > (new Date()).getTime()) {
             return;
         } else {
-            throwDices = (new Date()).getTime() + pause;
+            dicesThrow = (new Date()).getTime() + pause;
         }
 
-        var diceIon = parseInt($('#dice_ion').html()) || 0,
-            dicePlasma = parseInt($('#dice_plasma').html()) || 0,
-            diceAntimatter = parseInt($('#dice_antimatter').html()) || 0,
+        var dicesIon = parseInt($('#dices_ion').html()) || 0,
+            dicesPlasma = parseInt($('#dices_plasma').html()) || 0,
+            dicesAntimatter = parseInt($('#dices_antimatter').html()) || 0,
             i, html = '',
-            $result = $('#throw_dices_result');
+            $result = $('#dices_result');
 
         $result.html('');
 
@@ -109,16 +109,20 @@ $(function(){
         $this.removeClass('btn-primary');
         setTimeout(function(){ $this.addClass('btn-primary'); }, pause);
 
-        for (i = 0; i < diceIon; i++) {
+        for (i = 0; i < dicesIon; i++) {
             html += '<div class="game-dice game-ion">' + dice() + '</div>';
         }
-        for (i = 0; i < dicePlasma; i++) {
+        for (i = 0; i < dicesPlasma; i++) {
             html += '<div class="game-dice game-plasma">' + dice() + '</div>';
         }
-        for (i = 0; i < diceAntimatter; i++) {
+        for (i = 0; i < dicesAntimatter; i++) {
             html += '<div class="game-dice game-antimatter">' + dice() + '</div>';
         }
 
-        setTimeout(function(){ $result.html(html); }, dicePause);
+        setTimeout(function(){ $result.html(html); }, dicesPause);
+    });
+
+    $('#battle_run').on('click', function(){
+
     });
 });
