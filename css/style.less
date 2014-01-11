@@ -1,0 +1,84 @@
+//@import "../less/mixins.less";
+//@import "../less/variables.less";
+@import "../less/bootstrap.less";
+
+@grid-float-breakpoint: 0px;
+
+.row {
+  margin-top: @padding-base-vertical;
+  margin-bottom: @padding-base-vertical;
+}
+
+.table-align-left {
+  th, td {
+    text-align: left;
+  }
+}
+.table-align-right {
+  th, td, {
+    text-align: right;
+  }
+}
+.table-align-center {
+  th, td, {
+    text-align: center;
+  }
+}
+
+@colorIon: #ffd402;
+@colorPlasma: #f68b1f;
+@colorAntimatter: #df2720;
+@colorComputer: #ffffff;
+@colorShield: #231f20;
+
+.game-ion {
+  .btn, &.btn, &.game-dice {
+    background: @colorIon;
+  }
+}
+.game-plasma {
+  .btn, &.btn, &.game-dice {
+    background: @colorPlasma;
+  }
+}
+.game-antimatter {
+  .btn, &.btn, &.game-dice {
+    background: @colorAntimatter;
+  }
+}
+.game-computer {
+  .btn, &.btn, &.game-dice {
+    background: @colorComputer;
+  }
+}
+.game-shield {
+  .btn, &.btn, &.game-dice {
+    background: @colorShield;
+    color: #fff;
+  }
+}
+
+.cube(@size, @padding) {
+  width: floor(@size - @padding * 4);
+  height: floor(@size - @padding * 4);
+  line-height: floor((@size - @padding * 4) * 3 / 4);
+  margin: @padding;
+  padding: @padding;
+  border-radius: @padding;
+  font-size: floor((@size - @padding * 4) / 2)
+}
+.game-dice {
+  display: inline-block;
+  text-align: center;
+  .cube(90px, 8px);
+
+  @media (min-width: @screen-sm) {
+    .cube(@container-sm / 6, @padding-small-horizontal);
+  }
+  @media (min-width: @screen-md) {
+    .cube(@container-md / 6, @padding-base-horizontal);
+  }
+  @media (min-width: @screen-lg-min) {
+    .cube(@container-lg / 6, @padding-large-horizontal);
+  }
+}

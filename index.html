@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>Eclipse Helper</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <!--<link rel="stylesheet" href="css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- use CDN in production --
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script>!window.jQuery && document.write('<script src="jquery-2.0.3.min.js"><\/script>')</script>
+    <!-- -->
+    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/script.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default" role="navigation">
+    <ul class="nav navbar-nav">
+        <li class="active"><a href="#cannons" data-toggle="tab">Cannons</a></li>
+        <li><a href="#dices" data-toggle="tab">Dices</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <div class="tab-content">
+        <div class="tab-pane active" id="cannons">
+            <div class="row">
+                <div class="btn-group-vertical btn-group-lg col-xs-3 game-counter game-ion">
+                    <button class="btn game-counter-plus">+</button>
+                    <button class="btn game-counter-value active" id="cannon_ion">0</button>
+                    <button class="btn game-counter-minus">-</button>
+                </div>
+                <div class="btn-group-vertical btn-group-lg col-xs-3 game-counter game-plasma">
+                    <button class="btn game-counter-plus">+</button>
+                    <button class="btn game-counter-value active" id="cannon_plasma">0</button>
+                    <button class="btn game-counter-minus">-</button>
+                </div>
+                <div class="btn-group-vertical btn-group-lg col-xs-3 game-counter game-antimatter">
+                    <button class="btn game-counter-plus">+</button>
+                    <button class="btn game-counter-value active" id="cannon_antimatter">0</button>
+                    <button class="btn game-counter-minus">-</button>
+                </div>
+                <div class="btn-group-vertical btn-group-lg col-xs-3 game-counter game-computer">
+                    <button class="btn game-counter-plus">+</button>
+                    <button class="btn game-counter-value active" id="computer">0</button>
+                    <button class="btn game-counter-minus">-</button>
+                </div>
+            </div>
+            <div class="row">
+                <button class="btn btn-lg btn-primary col-xs-12" id="calc_cannons">Calc</button>
+            </div>
+            <div class="row" id="calc_cannons_result"></div>
+        </div>
+
+        <div class="tab-pane" id="dices">
+            <div class="row">
+                <div class="btn-group-vertical btn-group-lg col-xs-4 game-counter game-ion">
+                    <button class="btn game-counter-plus">+</button>
+                    <button class="btn game-counter-value active" id="dice_ion">0</button>
+                    <button class="btn game-counter-minus">-</button>
+                </div>
+                <div class="btn-group-vertical btn-group-lg col-xs-4 game-counter game-plasma">
+                    <button class="btn game-counter-plus">+</button>
+                    <button class="btn game-counter-value active" id="dice_plasma">0</button>
+                    <button class="btn game-counter-minus">-</button>
+                </div>
+                <div class="btn-group-vertical btn-group-lg col-xs-4 game-counter game-antimatter">
+                    <button class="btn game-counter-plus">+</button>
+                    <button class="btn game-counter-value active" id="dice_antimatter">0</button>
+                    <button class="btn game-counter-minus">-</button>
+                </div>
+            </div>
+            <div class="row">
+                <button class="btn btn-lg btn-primary col-xs-12" id="throw_dices">Throw</button>
+            </div>
+            <div class="row" id="throw_dices_result"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
