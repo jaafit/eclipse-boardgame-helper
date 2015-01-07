@@ -1,5 +1,5 @@
 //@import "../less/mixins.less";
-//@import "../less/variables.less";
+@import "../less/variables.less";
 @import "../less/bootstrap.less";
 
 @grid-float-breakpoint: 0px;
@@ -7,6 +7,24 @@
 .row {
   margin-top: @padding-base-vertical;
   margin-bottom: @padding-base-vertical;
+}
+
+.panel-heading {
+  cursor: pointer;
+  .clear-btn, .default-ancient-button {
+    margin-top: -8px;
+    background: @btn-default-bg;
+  }
+  .default-ancient-button {
+    margin-right: 15px;
+  }
+}
+.panel-body {
+  display: none;
+}
+
+.panel-visible {
+  display: block;
 }
 
 .table-align-left {
@@ -23,6 +41,17 @@
   th, td, {
     text-align: center;
   }
+}
+
+.game-counter .btn {
+  padding-left: 1px;
+  padding-right: 1px;
+}
+
+.game-counter-label {
+  text-align: center;
+  text-overflow: clip;
+  overflow: hidden;
 }
 
 @colorIon: #ffd402;
@@ -81,4 +110,15 @@
   @media (min-width: @screen-lg-min) {
     .cube(@container-lg / 6, @padding-large-horizontal);
   }
+}
+
+.battle-ship-group {
+  .panel-body .col-xs-2 {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+.battle-result {
+  margin: 50px 0;
 }

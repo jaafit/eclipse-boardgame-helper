@@ -1,88 +1,1015 @@
 <!DOCTYPE html>
 <html class="no-js">
 <head>
-    <meta charset="utf-8">
-    <title>Eclipse Helper</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="css/style.css">
-    <!-- use CDN in production -->
-    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-    <script>!window.jQuery && document.write('<script src="jquery-2.0.3.min.js"><\/script>')</script>
-    <!-- -->
-    <!--<script src="js/jquery-2.0.3.min.js"></script>-->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/script.js"></script>
+	<meta charset="utf-8">
+	<title>Eclipse Helper</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <nav class="navbar navbar-default" role="navigation">
-    <ul class="nav navbar-nav">
-        <li class="active"><a href="#cannons" data-toggle="tab">Cannons</a></li>
-        <li><a href="#dices" data-toggle="tab">Dices</a></li>
-        <li><a href="#battle" data-toggle="tab">Battle</a></li>
-    </ul>
+	<ul class="nav navbar-nav">
+		<li class="active"><a href="#cannons" data-toggle="tab">Cannons</a></li>
+		<li><a href="#dices" data-toggle="tab">Dices</a></li>
+		<li><a href="#battle" data-toggle="tab">Battle</a></li>
+	</ul>
 </nav>
 
 <div class="container">
-    <div class="tab-content">
-        <!-- CANNONS -->
-        <div class="tab-pane active" id="cannons">
-            <div class="row">
-                <div class="btn-group-vertical btn-group-lg col-xs-3 game-counter game-ion">
-                    <button class="btn game-counter-plus">+</button>
-                    <button class="btn game-counter-value active" id="cannons_ion">0</button>
-                    <button class="btn game-counter-minus">-</button>
-                </div>
-                <div class="btn-group-vertical btn-group-lg col-xs-3 game-counter game-plasma">
-                    <button class="btn game-counter-plus">+</button>
-                    <button class="btn game-counter-value active" id="cannons_plasma">0</button>
-                    <button class="btn game-counter-minus">-</button>
-                </div>
-                <div class="btn-group-vertical btn-group-lg col-xs-3 game-counter game-antimatter">
-                    <button class="btn game-counter-plus">+</button>
-                    <button class="btn game-counter-value active" id="cannons_antimatter">0</button>
-                    <button class="btn game-counter-minus">-</button>
-                </div>
-                <div class="btn-group-vertical btn-group-lg col-xs-3 game-counter game-computer">
-                    <button class="btn game-counter-plus">+</button>
-                    <button class="btn game-counter-value active" id="cannons_computer">0</button>
-                    <button class="btn game-counter-minus">-</button>
-                </div>
-            </div>
-            <div class="row">
-                <button class="btn btn-lg btn-primary col-xs-12" id="cannons_calc">Calc</button>
-            </div>
-            <div class="row" id="cannons_result"></div>
-        </div>
-        <!-- /CANNONS -->
+	<div class="tab-content">
+		<!-- CANNONS -->
+		<div class="tab-pane active" id="cannons">
+			<div class="row">
+				
+		<div class="btn-group-vertical col-xs-3 game-counter game-ion btn-group-lg">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="cannons_ion" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+					
+		<div class="btn-group-vertical col-xs-3 game-counter game-plasma btn-group-lg">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="cannons_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+					
+		<div class="btn-group-vertical col-xs-3 game-counter game-antimatter btn-group-lg">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="cannons_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+					
+		<div class="btn-group-vertical col-xs-3 game-counter game-computer btn-group-lg">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="cannons_computer" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+				</div>
+			<div class="row">
+				<button class="btn btn-lg btn-primary col-xs-12" id="cannons_calc">Calc</button>
+			</div>
+			<div class="row" id="cannons_result"></div>
+		</div>
+		<!-- /CANNONS -->
 
-        <!-- DICES -->
-        <div class="tab-pane" id="dices">
-            <div class="row">
-                <div class="btn-group-vertical btn-group-lg col-xs-4 game-counter game-ion">
-                    <button class="btn game-counter-plus">+</button>
-                    <button class="btn game-counter-value active" id="dices_ion">0</button>
-                    <button class="btn game-counter-minus">-</button>
-                </div>
-                <div class="btn-group-vertical btn-group-lg col-xs-4 game-counter game-plasma">
-                    <button class="btn game-counter-plus">+</button>
-                    <button class="btn game-counter-value active" id="dices_plasma">0</button>
-                    <button class="btn game-counter-minus">-</button>
-                </div>
-                <div class="btn-group-vertical btn-group-lg col-xs-4 game-counter game-antimatter">
-                    <button class="btn game-counter-plus">+</button>
-                    <button class="btn game-counter-value active" id="dices_antimatter">0</button>
-                    <button class="btn game-counter-minus">-</button>
-                </div>
-            </div>
-            <div class="row">
-                <button class="btn btn-lg btn-primary col-xs-12" id="dices_throw">Throw</button>
-            </div>
-            <div class="row" id="dices_result"></div>
-        </div>
-        <!-- /DICES -->
-    </div>
+		<!-- DICES -->
+		<div class="tab-pane" id="dices">
+			<div class="row">
+				
+		<div class="btn-group-vertical col-xs-4 game-counter game-ion btn-group-lg">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="dices_ion" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+					
+		<div class="btn-group-vertical col-xs-4 game-counter game-plasma btn-group-lg">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="dices_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+					
+		<div class="btn-group-vertical col-xs-4 game-counter game-antimatter btn-group-lg">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="dices_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+				</div>
+			<div class="row">
+				<button class="btn btn-lg btn-primary col-xs-12" id="dices_throw">Throw</button>
+			</div>
+			<div class="row" id="dices_result"></div>
+		</div>
+		<!-- /DICES -->
+
+		<!-- BATTLE -->
+		<div class="tab-pane" id="battle">
+			<h2>First Army</h2>
+			
+		<div class="panel panel-default clear-group battle-ship-group">
+			<div class="panel-heading">Interceptors<button class="btn clear-btn pull-right">Clear</button></div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-2 game-counter-label">Count</div>
+					<div class="col-xs-2 game-counter-label">Morph</div>
+					<div class="col-xs-2 game-counter-label">Hull</div>
+					<div class="col-xs-2 game-counter-label">Computer</div>
+					<div class="col-xs-2 game-counter-label">Shield</div>
+					<div class="col-xs-2 game-counter-label">Initiative</div>
+				</div>
+				<div class="row">
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_interceptor_count" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_interceptor_morph" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_interceptor_hull" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-computer">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_interceptor_computer" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-shield">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_interceptor_shield" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_interceptor_initiative" data-value="3">3</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+				</div>
+
+				<div class="row">
+					<div class="col-xs-6 game-counter-label">Cannons</div>
+					<div class="col-xs-6 game-counter-label">Rockets</div>
+				</div>
+				<div class="row">
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-ion">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_interceptor_cannon_ion" data-value="1">1</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-plasma">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_interceptor_cannon_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-antimatter">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_interceptor_cannon_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-ion">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_interceptor_rocket_ion" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-plasma">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_interceptor_rocket_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-antimatter">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_interceptor_rocket_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+				</div>
+			</div>
+		</div>
+				
+		<div class="panel panel-default clear-group battle-ship-group">
+			<div class="panel-heading">Cruisers<button class="btn clear-btn pull-right">Clear</button></div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-2 game-counter-label">Count</div>
+					<div class="col-xs-2 game-counter-label">Morph</div>
+					<div class="col-xs-2 game-counter-label">Hull</div>
+					<div class="col-xs-2 game-counter-label">Computer</div>
+					<div class="col-xs-2 game-counter-label">Shield</div>
+					<div class="col-xs-2 game-counter-label">Initiative</div>
+				</div>
+				<div class="row">
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_cruiser_count" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_cruiser_morph" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_cruiser_hull" data-value="1">1</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-computer">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_cruiser_computer" data-value="1">1</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-shield">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_cruiser_shield" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_cruiser_initiative" data-value="2">2</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+				</div>
+
+				<div class="row">
+					<div class="col-xs-6 game-counter-label">Cannons</div>
+					<div class="col-xs-6 game-counter-label">Rockets</div>
+				</div>
+				<div class="row">
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-ion">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_cruiser_cannon_ion" data-value="1">1</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-plasma">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_cruiser_cannon_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-antimatter">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_cruiser_cannon_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-ion">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_cruiser_rocket_ion" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-plasma">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_cruiser_rocket_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-antimatter">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_cruiser_rocket_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+				</div>
+			</div>
+		</div>
+				
+		<div class="panel panel-default clear-group battle-ship-group">
+			<div class="panel-heading">Dreadnoughts<button class="btn clear-btn pull-right">Clear</button></div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-2 game-counter-label">Count</div>
+					<div class="col-xs-2 game-counter-label">Morph</div>
+					<div class="col-xs-2 game-counter-label">Hull</div>
+					<div class="col-xs-2 game-counter-label">Computer</div>
+					<div class="col-xs-2 game-counter-label">Shield</div>
+					<div class="col-xs-2 game-counter-label">Initiative</div>
+				</div>
+				<div class="row">
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_dreadnought_count" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_dreadnought_morph" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_dreadnought_hull" data-value="2">2</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-computer">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_dreadnought_computer" data-value="1">1</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-shield">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_dreadnought_shield" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_dreadnought_initiative" data-value="1">1</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+				</div>
+
+				<div class="row">
+					<div class="col-xs-6 game-counter-label">Cannons</div>
+					<div class="col-xs-6 game-counter-label">Rockets</div>
+				</div>
+				<div class="row">
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-ion">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_dreadnought_cannon_ion" data-value="2">2</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-plasma">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_dreadnought_cannon_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-antimatter">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_dreadnought_cannon_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-ion">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_dreadnought_rocket_ion" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-plasma">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_dreadnought_rocket_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-antimatter">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_dreadnought_rocket_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+				</div>
+			</div>
+		</div>
+				
+		<div class="panel panel-default clear-group battle-ship-group">
+			<div class="panel-heading">Starbases<button class="btn clear-btn pull-right">Clear</button></div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-2 game-counter-label">Count</div>
+					<div class="col-xs-2 game-counter-label">Morph</div>
+					<div class="col-xs-2 game-counter-label">Hull</div>
+					<div class="col-xs-2 game-counter-label">Computer</div>
+					<div class="col-xs-2 game-counter-label">Shield</div>
+					<div class="col-xs-2 game-counter-label">Initiative</div>
+				</div>
+				<div class="row">
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_starbase_count" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_starbase_morph" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_starbase_hull" data-value="2">2</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-computer">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_starbase_computer" data-value="1">1</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-shield">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_starbase_shield" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_starbase_initiative" data-value="4">4</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+				</div>
+
+				<div class="row">
+					<div class="col-xs-6 game-counter-label">Cannons</div>
+					<div class="col-xs-6 game-counter-label">Rockets</div>
+				</div>
+				<div class="row">
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-ion">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_starbase_cannon_ion" data-value="1">1</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-plasma">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_starbase_cannon_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-antimatter">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_starbase_cannon_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-ion">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_starbase_rocket_ion" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-plasma">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_starbase_rocket_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-antimatter">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_first_starbase_rocket_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+				</div>
+			</div>
+		</div>
+				
+		<div class="panel panel-default battle-technologies">
+			<div class="panel-heading">Technologies</div>
+			<div class="panel-body">
+				<div class="btn-group col-xs-12">
+					<button id="battle_first_technology_antimatter_splitter" class="btn col-xs-4 button-checkbox" data-value="0">Antimatter Splitter</button>
+					<button id="battle_first_technology_distortion_shield" class="btn col-xs-4 button-checkbox" data-value="0">Distortion Shield</button>
+					<button id="battle_first_technology_point_defence" class="btn col-xs-4 button-checkbox" data-value="0">Point Defence</button>
+				</div>
+			</div>
+		</div>
+				
+		<div class="panel panel-default battle-side">
+			<div class="panel-body panel-visible">
+				<div class="row btn-group col-xs-12">
+					<button id="battle_first_side_attack" class="btn col-xs-6 button-radio btn-danger" data-value="1" data-side="attack" data-class="btn-danger">Attack</button>
+					<button id="battle_first_side_defence" class="btn col-xs-6 button-radio " data-value="0" data-side="defence" data-class="btn-success">Defence</button>
+				</div>
+			</div>
+		</div>
+	
+			<h2>Second Army</h2>
+			
+		<div class="panel panel-default clear-group battle-ship-group">
+			<div class="panel-heading">Interceptors<button class="btn clear-btn pull-right">Clear</button></div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-2 game-counter-label">Count</div>
+					<div class="col-xs-2 game-counter-label">Morph</div>
+					<div class="col-xs-2 game-counter-label">Hull</div>
+					<div class="col-xs-2 game-counter-label">Computer</div>
+					<div class="col-xs-2 game-counter-label">Shield</div>
+					<div class="col-xs-2 game-counter-label">Initiative</div>
+				</div>
+				<div class="row">
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_interceptor_count" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_interceptor_morph" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_interceptor_hull" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-computer">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_interceptor_computer" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-shield">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_interceptor_shield" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_interceptor_initiative" data-value="3">3</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+				</div>
+
+				<div class="row">
+					<div class="col-xs-6 game-counter-label">Cannons</div>
+					<div class="col-xs-6 game-counter-label">Rockets</div>
+				</div>
+				<div class="row">
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-ion">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_interceptor_cannon_ion" data-value="1">1</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-plasma">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_interceptor_cannon_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-antimatter">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_interceptor_cannon_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-ion">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_interceptor_rocket_ion" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-plasma">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_interceptor_rocket_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-antimatter">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_interceptor_rocket_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+				</div>
+			</div>
+		</div>
+				
+		<div class="panel panel-default clear-group battle-ship-group">
+			<div class="panel-heading">Cruisers<button class="btn clear-btn pull-right">Clear</button></div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-2 game-counter-label">Count</div>
+					<div class="col-xs-2 game-counter-label">Morph</div>
+					<div class="col-xs-2 game-counter-label">Hull</div>
+					<div class="col-xs-2 game-counter-label">Computer</div>
+					<div class="col-xs-2 game-counter-label">Shield</div>
+					<div class="col-xs-2 game-counter-label">Initiative</div>
+				</div>
+				<div class="row">
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_cruiser_count" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_cruiser_morph" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_cruiser_hull" data-value="1">1</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-computer">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_cruiser_computer" data-value="1">1</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-shield">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_cruiser_shield" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_cruiser_initiative" data-value="2">2</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+				</div>
+
+				<div class="row">
+					<div class="col-xs-6 game-counter-label">Cannons</div>
+					<div class="col-xs-6 game-counter-label">Rockets</div>
+				</div>
+				<div class="row">
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-ion">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_cruiser_cannon_ion" data-value="1">1</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-plasma">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_cruiser_cannon_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-antimatter">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_cruiser_cannon_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-ion">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_cruiser_rocket_ion" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-plasma">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_cruiser_rocket_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-antimatter">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_cruiser_rocket_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+				</div>
+			</div>
+		</div>
+				
+		<div class="panel panel-default clear-group battle-ship-group">
+			<div class="panel-heading">Dreadnoughts<button class="btn clear-btn pull-right">Clear</button></div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-2 game-counter-label">Count</div>
+					<div class="col-xs-2 game-counter-label">Morph</div>
+					<div class="col-xs-2 game-counter-label">Hull</div>
+					<div class="col-xs-2 game-counter-label">Computer</div>
+					<div class="col-xs-2 game-counter-label">Shield</div>
+					<div class="col-xs-2 game-counter-label">Initiative</div>
+				</div>
+				<div class="row">
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_dreadnought_count" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_dreadnought_morph" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_dreadnought_hull" data-value="2">2</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-computer">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_dreadnought_computer" data-value="1">1</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-shield">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_dreadnought_shield" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_dreadnought_initiative" data-value="1">1</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+				</div>
+
+				<div class="row">
+					<div class="col-xs-6 game-counter-label">Cannons</div>
+					<div class="col-xs-6 game-counter-label">Rockets</div>
+				</div>
+				<div class="row">
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-ion">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_dreadnought_cannon_ion" data-value="2">2</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-plasma">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_dreadnought_cannon_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-antimatter">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_dreadnought_cannon_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-ion">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_dreadnought_rocket_ion" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-plasma">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_dreadnought_rocket_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-antimatter">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_dreadnought_rocket_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+				</div>
+			</div>
+		</div>
+				
+		<div class="panel panel-default clear-group battle-ship-group">
+			<div class="panel-heading">Starbases<button class="btn clear-btn pull-right">Clear</button></div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-2 game-counter-label">Count</div>
+					<div class="col-xs-2 game-counter-label">Morph</div>
+					<div class="col-xs-2 game-counter-label">Hull</div>
+					<div class="col-xs-2 game-counter-label">Computer</div>
+					<div class="col-xs-2 game-counter-label">Shield</div>
+					<div class="col-xs-2 game-counter-label">Initiative</div>
+				</div>
+				<div class="row">
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_starbase_count" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_starbase_morph" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_starbase_hull" data-value="2">2</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-computer">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_starbase_computer" data-value="1">1</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-shield">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_starbase_shield" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter ">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_starbase_initiative" data-value="4">4</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+				</div>
+
+				<div class="row">
+					<div class="col-xs-6 game-counter-label">Cannons</div>
+					<div class="col-xs-6 game-counter-label">Rockets</div>
+				</div>
+				<div class="row">
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-ion">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_starbase_cannon_ion" data-value="1">1</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-plasma">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_starbase_cannon_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-antimatter">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_starbase_cannon_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-ion">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_starbase_rocket_ion" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-plasma">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_starbase_rocket_plasma" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+					
+		<div class="btn-group-vertical col-xs-2 game-counter game-antimatter">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-value active" id="battle_second_starbase_rocket_antimatter" data-value="0">0</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+	
+				</div>
+			</div>
+		</div>
+				
+		<div class="panel panel-default battle-technologies">
+			<div class="panel-heading">Technologies</div>
+			<div class="panel-body">
+				<div class="btn-group col-xs-12">
+					<button id="battle_second_technology_antimatter_splitter" class="btn col-xs-4 button-checkbox" data-value="0">Antimatter Splitter</button>
+					<button id="battle_second_technology_distortion_shield" class="btn col-xs-4 button-checkbox" data-value="0">Distortion Shield</button>
+					<button id="battle_second_technology_point_defence" class="btn col-xs-4 button-checkbox" data-value="0">Point Defence</button>
+				</div>
+			</div>
+		</div>
+				
+		<div class="panel panel-default battle-side">
+			<div class="panel-body panel-visible">
+				<div class="row btn-group col-xs-12">
+					<button id="battle_first_side_attack" class="btn col-xs-6 button-radio " data-value="0" data-side="attack" data-class="btn-danger">Attack</button>
+					<button id="battle_first_side_defence" class="btn col-xs-6 button-radio btn-success" data-value="1" data-side="defence" data-class="btn-success">Defence</button>
+				</div>
+			</div>
+		</div>
+	
+			<hr>
+
+			<div class="panel panel-default battle-side">
+				<div class="panel-body panel-visible">
+					<div class="row btn-group col-xs-12 game-counter" data-list="10,50,100,250,500,1000,2500,5000,10000,25000,50000,100000">
+						<button class="btn btn-primary game-counter-minus col-xs-4">-</button>
+						<button class="btn btn-primary game-counter-value col-xs-4 active" id="battle_count" data-value="5">1000</button>
+						<button class="btn btn-primary game-counter-plus col-xs-4">+</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<button class="btn btn-lg btn-primary col-xs-12" id="battle_run">Run Battle</button>
+			</div>
+			<div class="row battle-result" id="battle_result"></div>
+		</div>
+		<!-- /BATTLE -->
+	</div>
 </div>
+
+<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+<script src="js/script.js"></script>
 
 </body>
 </html>
