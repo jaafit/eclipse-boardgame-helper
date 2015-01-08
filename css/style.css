@@ -6402,5 +6402,9 @@ button.close {
   padding-right: 5px;
 }
 .battle-result {
-  margin: 50px 0;
+  margin: 25px 0;
+}
+.battle-result td,
+.battle-result th {
+  text-align: center;
 }

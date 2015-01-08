@@ -67,9 +67,10 @@
 			<?= battleTechnologies('battle_second_technology') ?>
 			<?= battleSide('battle_first_side', false) ?>
 
-			<hr>
+			<h2>Run calculation</h2>
 
 			<div class="panel panel-default battle-side">
+				<div class="panel-heading">Number of battles calculation</div>
 				<div class="panel-body panel-visible">
 					<div class="row btn-group col-xs-12 game-counter" data-list="10,50,100,250,500,1000,2500,5000,10000,25000,50000,100000">
 						<button class="btn btn-primary game-counter-minus col-xs-4">-</button>
@@ -82,7 +83,9 @@
 			<div class="row">
 				<button class="btn btn-lg btn-primary col-xs-12" id="battle_run">Run Battle</button>
 			</div>
-			<div class="row battle-result" id="battle_result"></div>
+
+			<h2>Results</h2>
+			<div class="row battle-result" id="battle_result"><i>Click "Run Battle" for get results</i></div>
 		</div>
 		<!-- /BATTLE -->
 	</div>

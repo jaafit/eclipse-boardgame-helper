@@ -1,6 +1,4 @@
 (function($){
-    var GAME = this;
-
     // Event Handlers
     var $body = $('body');
 
@@ -177,33 +175,51 @@
         var results = calcBattles(firstArmy, secondArmy, count);
 
 
-        var width = (results[0] && results[-1]) ? 3 : ((results[0] || results[-1]) ? 4 : 6);
+        var width = (results.winner[0] && results.winner[-1]) ? 3 : ((results.winner[0] || results.winner[-1]) ? 4 : 6);
         var html = '';
+
+        // Winner table
+        html += '<h4>Winner</h4>';
         html += '<table class="table">';
         html += '<thead><tr>';
 
         html += '<th class="col-xs-' + width + '">First Victory</th>';
         html += '<th class="col-xs-' + width + '">Second Victory</th>';
-        if (results[0]) {
+        if (results.winner[0]) {
             html += '<th class="col-xs-' + width + '">Draw</th>';
         }
-        if (results[-1]) {
+        if (results.winner[-1]) {
             html += '<th class="col-xs-' + width + '">Stalemate</th>';
         }
 
         html += '</tr></thead>';
         html += '<tbody><tr>';
 
-        html += '<td>' + round(100 * results[1] / count, 1) + '&nbsp;%</td>';
-        html += '<td>' + round(100 * results[2] / count, 1) + '&nbsp;%</td>';
-        if (results[0]) {
-            html += '<td>' + round(100 * results[0] / count, 1) + '&nbsp;%</td>';
+        html += '<td>' + round(100 * results.winner[1] / count, 1) + '&nbsp;%</td>';
+        html += '<td>' + round(100 * results.winner[2] / count, 1) + '&nbsp;%</td>';
+        if (results.winner[0]) {
+            html += '<td>' + round(100 * results.winner[0] / count, 1) + '&nbsp;%</td>';
         }
-        if (results[-1]) {
-            html += '<td>' + round(100 * results[-1] / count, 1) + '&nbsp;%</td>';
+        if (results.winner[-1]) {
+            html += '<td>' + round(100 * results.winner[-1] / count, 1) + '&nbsp;%</td>';
         }
 
         html += '</tr></tbody>';
+        html += '</table>';
+
+        // Survivors table
+        html += '<h4>Survivors</h4>';
+        html += '<table class="table">';
+        html += '<thead><tr><th></th><th>First Army</th><th>Second Army</th></tr></thead>';
+        html += '<tbody>';
+        for (var i in shipTypes) {
+            html += '<tr>' +
+            '<td>' + capitalize(shipTypes[i]) + '</td>' +
+            '<td>' + round(results.firstArmy[shipTypes[i]], 2) + '</td>' +
+            '<td>' + round(results.secondArmy[shipTypes[i]], 2) + '</td>' +
+            '</tr>';
+        }
+        html += '</tbody>';
         html += '</table>';
 
         $('#battle_result').html(html);
@@ -332,8 +348,9 @@
             'cannon_ion','cannon_plasma','cannon_antimatter','rocket_ion','rocket_plasma','rocket_antimatter'];
 
         this.default = {};
+        this.type = 'ship';
 
-        this.constructor = function(attrs) {
+        this.init = function(attrs) {
             this.initParams(attrs);
             this.damage = 0;
             return this;
@@ -413,6 +430,15 @@
 
         this.add(ships || []);
 
+        this.eachAlive = function(callback) {
+            for (var i = 0, ii = this.items.length; i < ii; ++i) {
+                if (!this.items[i].isDestroy()) {
+                    callback(this.items[i], i, this.items);
+                }
+            }
+            return this;
+        };
+
         this.clearDamage = function() {
             this.each(function(ship) {
                 ship.clearDamage();
@@ -446,9 +472,11 @@
             'cannon_ion': 1
         };
 
+        self.type = 'interceptor';
+
         self.potency = 1;
 
-        self.constructor(attrs);
+        self.init(attrs);
     }
     Interceptor.prototype = new Ship;
 
@@ -462,9 +490,11 @@
             'cannon_ion': 1
         };
 
+        self.type = 'cruiser';
+
         self.potency = 3;
 
-        self.constructor(attrs);
+        self.init(attrs);
     }
     Cruiser.prototype = new Ship;
 
@@ -478,9 +508,11 @@
             'cannon_ion': 2
         };
 
+        self.type = 'dreadnought';
+
         self.potency = 4;
 
-        self.constructor(attrs);
+        self.init(attrs);
     }
     Dreadnought.prototype = new Ship;
 
@@ -494,9 +526,11 @@
             'cannon_ion': 1
         };
 
+        self.type = 'starbase';
+
         self.potency = 2;
 
-        self.constructor(attrs);
+        self.init(attrs);
     }
     Starbase.prototype = new Ship;
 
@@ -625,8 +659,7 @@
 
             if (damages.getSumDamage()) {
                 // destroy ships
-                ships.each(function(ship) {
-                    if (ship.isDestroy()) { return; }
+                ships.eachAlive(function(ship) {
                     if (ship.isDestroy(damages.getSumDamage(ship))) {
                         damages.getForShip(ship, true).each(function(damage) {
                             ship.putDamage(damage);
@@ -637,8 +670,7 @@
 
             if (damages.getSumDamage()) {
                 // damage ships
-                ships.each(function(ship) {
-                    if (ship.isDestroy()) { return; }
+                ships.eachAlive(function(ship) {
                     damages.getForShip(ship, true).each(function(damage) {
                         ship.putDamage(damage);
                     });
@@ -759,8 +791,7 @@
 
     function calcBattles(firstArmyAttrs, secondArmyAttrs, count) {
         var firstArmy = new Army(firstArmyAttrs),
-            secondArmy = new Army(secondArmyAttrs),
-            results = {0: 0, 1: 0, 2: 0, '-1': 0};
+            secondArmy = new Army(secondArmyAttrs);
 
         var order = [],
             ships = [],
@@ -790,13 +821,41 @@
             }
         }
 
+        var results = {
+            winner: {0: 0, 1: 0, 2: 0, '-1': 0},
+            firstArmy: {interceptor: 0, cruiser: 0, dreadnought: 0, starbase: 0},
+            secondArmy: {interceptor: 0, cruiser: 0, dreadnought: 0, starbase: 0},
+            count: 0
+        };
+
         for (var i = 0, result; i < count; ++i) {
             result = calcBattle(firstArmy, secondArmy, order);
-            ++results[result];
+            ++results.count;
+            ++results.winner[result];
+
+            if (!firstArmy.isDestroy()) {
+                firstArmy.getShips().eachAlive(function(ship) {
+                    ++results.firstArmy[ship.type];
+                });
+            }
+
+            if (!secondArmy.isDestroy()) {
+                secondArmy.getShips().eachAlive(function(ship) {
+                    ++results.secondArmy[ship.type];
+                });
+            }
         }
 
-        console.log('results', results, firstArmy, secondArmy);
+        if (results.count > 0) {
+            for (var i in results.firstArmy) {
+                results.firstArmy[i] = results.firstArmy[i] / count;
+            }
+            for (var i in results.secondArmy) {
+                results.secondArmy[i] = results.secondArmy[i] / count;
+            }
+        }
 
+        console.log('results', results);
         return results;
     }
 
@@ -867,6 +926,7 @@
         }
         return copy;
     }
+    function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
     function diceTest(limit) {
         var result = {}, i;
