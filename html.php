@@ -91,12 +91,8 @@
 	</div>
 </div>
 
-<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
-<?php // <script>!window.jQuery && document.write('<script src="js/jquery.min.js"><\/script>')</script> ?>
-
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-<?php // <script>!window.bootstrap && document.write('<script src="js/bootstrap.min.js"><\/script>')</script> ?>
-
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script src="js/script.js"></script>
 
 </body>
