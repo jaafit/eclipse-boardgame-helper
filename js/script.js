@@ -129,16 +129,23 @@
 
 
     // Battle page
-    var shipTypes = ['interceptor','cruiser','dreadnought','starbase'];
-    var battleCalcProcess = false;
-    $('#battle_run').on('click', function(){
+    var shipTypes = ['interceptor','cruiser','dreadnought','starbase'],
+        $battleRun = $('#battle_run'),
+        $battleResult = $('#battle_result'),
+        battleCalcProcess = false;
+
+    $battleRun.on('click', function(){
         if (battleCalcProcess) {
             return;
         }
         battleCalcProcess = true;
-        var $this = $(this);
-        $this.removeClass('btn-primary');
+        $battleRun.removeClass('btn-primary');
+        $battleResult.html('<i>processing</i>');
 
+        setTimeout(battleRun, 1);
+    });
+
+    function battleRun() {
         var technologies = ['antimatter_splitter','distortion_shield','point_defence'],
             fields = ['count','hull','morph','computer','shield','initiative',
                 'cannon_ion','cannon_plasma','cannon_antimatter','rocket_ion','rocket_plasma','rocket_antimatter'];
@@ -222,11 +229,10 @@
         html += '</tbody>';
         html += '</table>';
 
-        $('#battle_result').html(html);
-
-        $this.addClass('btn-primary');
+        $battleResult.html(html);
+        $battleRun.addClass('btn-primary');
         battleCalcProcess = false;
-    });
+    }
 
     //$('#battle_first_interceptor_count, #battle_second_interceptor_count')
     //    .closest('.battle-ship-group').find('.panel-heading')
