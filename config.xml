@@ -18,5 +18,5 @@
     <preference name="permissions"                value="none"/>
     <preference name="phonegap-version"           value="3.6.3" />
     <preference name="orientation"                value="default" />
-    <preference name="fullscreen"                 value="true" />
+    <preference name="fullscreen"                 value="false" />
 </widget>

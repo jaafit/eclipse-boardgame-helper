@@ -293,6 +293,27 @@
 
 
 
+    function ArrayCollection() {}
+    ArrayCollection.prototype.push = function(key, value) {
+        if (this[key] === undefined) {
+            this[key] = [];
+        }
+        return this[key].push(value);
+    };
+    ArrayCollection.prototype.get = function(key) {
+        return this[key] || [];
+    };
+    ArrayCollection.prototype.keys = function(callback) {
+        var keys = [];
+        for (var i in this) {
+            if (this.hasOwnProperty(i)) {
+                keys.push(callback === undefined ? i : callback(i));
+            }
+        }
+        return keys;
+    };
+
+
     function Collection(items) {
         this.type = Object;
         this.items = [];
@@ -366,7 +387,7 @@
             attrs = attrs || [];
             for (var i in this.params) {
                 var param = this.params[i];
-                this[param] = attrs[param] || (this.default[param] || 0);
+                this[param] = attrs[param] !== undefined ? attrs[param] : (this.default[param] !== undefined ? this.default[param] : 0);
             }
             return this;
         };
@@ -386,7 +407,7 @@
         };
 
         this.isDestroy = function(damage) {
-            return this.damage + (damage || 0) > this.hull;
+            return this.getHealth() - (damage || 0) <= 0;
         };
 
         this.fire = function(army, fireType) {
@@ -410,7 +431,7 @@
                             damages.add(new Damage({
                                 dice: diceResult,
                                 damage: cannonDamage,
-                                computer: this.computer,
+                                ship: this,
                                 type: cannonType
                             }));
                         }
@@ -428,6 +449,8 @@
         this.fireRockets = function(army) {
             return this.fire(army, 'rocket');
         };
+
+        this.init();
     }
 
     function ShipCollection(ships) {
@@ -578,8 +601,8 @@
                 self.ships.push(new Starbase(attrs.starbase));
             }
 
-            self.shipsByInitiative = {};
-            self.shipsByPotency = {};
+            self.shipsByInitiative = new ArrayCollection();
+            self.shipsByPotency = new ArrayCollection();
             for (var i = 0, ii = self.ships.length; i < ii; ++i) {
                 var ship = self.ships[i];
 
@@ -587,15 +610,8 @@
                     ship.initiative += 0.5;
                 }
 
-                if (self.shipsByInitiative[ship.initiative] === undefined) {
-                    self.shipsByInitiative[ship.initiative] = [];
-                }
-                self.shipsByInitiative[ship.initiative].push(ship);
-
-                if (self.shipsByPotency[ship.potency] === undefined) {
-                    self.shipsByPotency[ship.potency] = [];
-                }
-                self.shipsByPotency[ship.potency].push(ship);
+                self.shipsByInitiative.push(ship.initiative, ship);
+                self.shipsByPotency.push(ship.potency, ship);
             }
         };
 
@@ -613,19 +629,15 @@
         };
 
         self.getInitiatives = function() {
-            var initiatives = [];
-            for (var initiative in self.shipsByInitiative) {
-                initiatives.push(parseFloat(initiative));
-            }
-            return initiatives;
+            return self.shipsByInitiative.keys(function(initiative) {
+                return parseFloat(initiative);
+            });
         };
 
         self.getPotencies = function() {
-            var potencies = [];
-            for (var potency in self.shipsByPotency) {
-                potencies.push(parseFloat(potency));
-            }
-            return potencies;
+            return self.shipsByPotency.keys(function(potency) {
+                return parseFloat(potency);
+            });
         };
 
         self.getShipsByInitiative = function(initiative) {
@@ -719,7 +731,7 @@
         };
 
         self.endFireRound = function() {
-            this.getShips().each(function(ship) {
+            this.getShips().eachAlive(function(ship) {
                 if (ship.morph) {
                     ship.damage -= ship.morph;
                 }
@@ -732,18 +744,18 @@
     function Damage(attrs) {
         this.dice = attrs.dice || NaN;
         this.damage = attrs.damage || 0;
-        this.computer = attrs.computer || 0;
+        this.ship = attrs.ship || new Ship();
         this.type = attrs.type || NaN;
         this.modify = attrs.modify || 0;
 
         this.getHit = function(ship) {
             if (ship === undefined) {
-                if (this.dice > 1 && (this.dice + this.computer + this.modify) >= 6) {
+                if (this.dice > 1 && (this.dice + this.ship.computer + this.modify) >= 6) {
                     return this.damage;
                 }
                 return 0;
             } else {
-                if (this.dice > 1 && (this.dice + this.computer + this.modify - ship.shield) >= 6) {
+                if (this.dice > 1 && (this.dice + this.ship.computer + this.modify - ship.shield) >= 6) {
                     return this.damage;
                 }
                 return 0;
@@ -757,6 +769,16 @@
 
         this.add(damages || []);
 
+        this.getHitted = function(ship) {
+            var damages = new DamageCollection();
+            this.each(function(damage) {
+                if (damage.getHit(ship) > 0) {
+                    damages.add(damage);
+                }
+            });
+            return damages;
+        };
+
         this.getSumDamage = function(ship) {
             var sum = 0;
             this.each(function(damage) {
@@ -766,6 +788,54 @@
         };
 
         this.getForShip = function(ship, remove) {
+            remove = remove === undefined ? true : !!remove;
+
+            var collection = this.getHitted(ship);
+
+            if (ship.isDestroy(collection.getSumDamage(ship))) {
+                var damagesByCount = new ArrayCollection(),
+                    damagesByHit = new ArrayCollection();
+                damagesByCount.push(collection.count(), collection);
+                damagesByHit.push(collection.getSumDamage(ship), collection);
+
+                for (var i = collection.count(); --i;) {
+                    var damagesProcess = damagesByCount.get(i+1);
+                    if (damagesProcess.length) {
+                        for (var j in damagesProcess) {
+                            damagesProcess[j].each(function(damage, k, damages) {
+                                var list = damages.slice(0);
+                                list.splice(k);
+                                var collection = new DamageCollection(list),
+                                    hits = collection.getSumDamage(ship);
+                                if (ship.isDestroy(hits)) {
+                                    damagesByCount.push(collection.count(), collection);
+                                    damagesByHit.push(hits, collection);
+                                }
+                            });
+                        }
+                    } else {
+                        break;
+                    }
+                }
+
+                var hits = damagesByHit.keys();
+                if (hits.length) {
+                    hits.sort(function (a, b) { return parseInt(a) - parseInt(b); });
+                    var bestDamages = damagesByHit.get(hits[0]);
+                    bestDamages.sort(function (a, b) { return a.count() - b.count() });
+                    damages = bestDamages[0];
+                }
+            }
+
+            if (remove) {
+                this.remove(damages.all());
+            }
+
+            return new DamageCollection(damages);
+        };
+
+        /** @deprecated */
+        this.getForShipSimple = function(ship, remove) {
             remove = remove === undefined ? true : !!remove;
             var damage,
                 hit,
@@ -861,8 +931,20 @@
             }
         }
 
-        console.log('results', results);
         return results;
+    }
+
+    function battleResult(firstArmy, secondArmy) {
+        if (firstArmy.isDestroy() && secondArmy.isDestroy()) {
+            return 0;
+        }
+        if (firstArmy.isDestroy()) {
+            return 2;
+        }
+        if (secondArmy.isDestroy()) {
+            return 1;
+        }
+        return -1;
     }
 
     function calcBattle(firstArmy, secondArmy, order) {
@@ -873,19 +955,6 @@
             action,
             damages;
 
-        var getResult = function() {
-            if (firstArmy.isDestroy() && secondArmy.isDestroy()) {
-                return 0;
-            }
-            if (firstArmy.isDestroy()) {
-                return 2;
-            }
-            if (secondArmy.isDestroy()) {
-                return 1;
-            }
-            return -1;
-        };
-
         // Rockets
         for (var i = 0, ii = order.length; i < ii; ++i) {
             action = order[i];
@@ -893,27 +962,29 @@
             action.defenceArmy.putDamagesRockets(damages);
         }
 
-        if ((result = getResult()) >= 0) {
+        if ((result = battleResult(firstArmy, secondArmy)) >= 0) {
             return result;
         }
 
         // Rounds
-        for (var j = 0; j < 1000; ++j) {
-            for (var i = 0, ii = order.length; i < ii; ++i) {
-                action = order[i];
-                damages = action.ships.fireCannons(action.fireArmy);
-                action.defenceArmy.putDamages(damages);
+        if (firstArmy.getShips().fireCannons(firstArmy).count() || secondArmy.getShips().fireCannons(secondArmy).count()) {
+            for (var j = 0; j < 1000; ++j) {
+                for (var i = 0, ii = order.length; i < ii; ++i) {
+                    action = order[i];
+                    damages = action.ships.fireCannons(action.fireArmy);
+                    action.defenceArmy.putDamages(damages);
 
-                if ((result = getResult()) >= 0) {
-                    return result;
+                    if ((result = battleResult(firstArmy, secondArmy)) >= 0) {
+                        return result;
+                    }
                 }
-            }
 
-            firstArmy.endFireRound();
-            secondArmy.endFireRound();
+                firstArmy.endFireRound();
+                secondArmy.endFireRound();
+            }
         }
 
-        return getResult();
+        return battleResult(firstArmy, secondArmy);
     }
 
 
@@ -932,6 +1003,7 @@
         }
         return copy;
     }
+    function def(v,d) { return v !== undefined ? v : d; }
     function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
     function diceTest(limit) {
