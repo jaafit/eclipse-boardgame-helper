@@ -5,6 +5,7 @@
 	<title>Eclipse Helper</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
 	<link rel="stylesheet" href="css/style.css">
+	<link rel="icon" type="image/png" href="img/icon.png">
 </head>
 <body>
 
@@ -14,6 +15,7 @@
 		<li><a href="#cannons" data-toggle="tab">Cannons</a></li>
 		<li><a href="#dices" data-toggle="tab">Dices</a></li>
 		<li><a href="#battle" data-toggle="tab">Battle</a></li>
+		<li><a href="#races" data-toggle="tab">Races</a></li>
 	</ul>
 </nav>
 
@@ -21,68 +23,83 @@
 	<div class="tab-content">
 		<!-- ABOUT -->
 				<div class="tab-pane active" id="about">
-			<p>Mini web application for <a href="http://boardgamegeek.com/boardgame/72125/eclipse">boardgame Eclipse</a></p>
-
-<p><a href="http://eclipse.mal.by"><strong>Demo</strong></a></p>
-
+			<p>Mini application for <a href="http://boardgamegeek.com/boardgame/72125/eclipse">boardgame Eclipse</a></p>
 <h1>Cannons</h1>
-
-<p>Calculation the probability of hits to the opponent.
-Select number of cannons or rockets and set bonus. Press "Calc" for get results.</p>
-
+<p>Calculation the probability of hits to the opponent.</p>
+<p>Select number of cannons or rockets and set bonus. Press &quot;Calc&quot; for get results.</p>
 <p>Types of counter:</p>
-
 <ul>
-<li>Ion (yellow) - number of ion cannons or rockets</li>
-<li>Plasma (orange) - number of plasma cannons or rockets</li>
-<li>Antimatter (red) - number of antimatter cannons or rockets</li>
+<li>
+<p>Ion (yellow) - number of ion cannons or rockets</p>
+</li>
+<li>
+<p>Plasma (orange) - number of plasma cannons or rockets</p>
+</li>
+<li>
+<p>Antimatter (red) - number of antimatter cannons or rockets</p>
+</li>
 <li>Bonus (white) - bonus of computers, considering opponent's shields</li>
 </ul>
-
 <h1>Dices</h1>
-
-<p>Simulation throw of dices.
-Select number of dices of each color. Press "Throw" for get results.</p>
-
+<p>Simulation throw of dices.</p>
+<p>Select number of dices of each color. Press &quot;Throw&quot; for get results.</p>
 <h1>Battle</h1>
-
-<p>Calculation the probability of winning the battle.
-Also, you can simulate one battle and get results.</p>
-
-<p>Enter the parameters of each army using the characteristics of ships and their number. 
-Also choose which technologies have each army and attacking or defending side.</p>
-
+<p>Calculation the probability of winning the battle.</p>
+<p>Also, you can simulate one battle and get results.</p>
+<p>Enter the parameters of each army using the characteristics of ships and their number. </p>
+<p>Also choose which technologies have each army and attacking or defending side.</p>
 <p>Ships characteristics:</p>
-
 <ul>
-<li>Number - number of ships of this type</li>
-<li>Hull - number of hulls</li>
-<li>Morph - number of Morph Shields</li>
-<li>Computer (white) - number of computers</li>
-<li>Shield (black) - number of shields</li>
-<li>Initiative - number of initiative</li>
-<li>Cannons:
-
+<li>
+<p>Number - number of ships of this type</p>
+</li>
+<li>
+<p>Hull - number of hulls</p>
+</li>
+<li>
+<p>Morph - number of Morph Shields</p>
+</li>
+<li>
+<p>Computer (white) - number of computers</p>
+</li>
+<li>
+<p>Shield (black) - number of shields</p>
+</li>
+<li>
+<p>Initiative - number of initiative</p>
+</li>
+<li>
+<p>Cannons:</p>
 <ul>
-<li>Ion (yellow) - number of ion cannons</li>
-<li>Plasma (orange) - number of plasma cannons</li>
+<li>
+<p>Ion (yellow) - number of ion cannons</p>
+</li>
+<li>
+<p>Plasma (orange) - number of plasma cannons</p>
+</li>
 <li>Antimatter (red) - number of antimatter cannons</li>
-</ul></li>
-<li>Rockets (on a standard module is 2 rocket; need enter 2, not 1, for each module):
-
-<ul>
-<li>Ion (yellow) - number of ion rockets</li>
-<li>Plasma (orange) - number of plasma rockets</li>
-<li>Antimatter (red) - number of antimatter rockets</li>
-</ul></li>
 </ul>
-
-<p>Select number of battles calculation.
-Algorithm will simulate a predetermined number of battles and display average statistics. 
-<strong>Attention</strong>, a lot of battles will lead to long-term calculation.</p>
-
-<p>After select all parameters, press "Run Battle" for get results.</p>
-		</div>
+</li>
+<li>
+<p>Rockets (on a standard module is 2 rocket; need enter 2, not 1, for each module):</p>
+<ul>
+<li>
+<p>Ion (yellow) - number of ion rockets</p>
+</li>
+<li>
+<p>Plasma (orange) - number of plasma rockets</p>
+</li>
+<li>Antimatter (red) - number of antimatter rockets</li>
+</ul>
+</li>
+</ul>
+<p>Select number of battles calculation.</p>
+<p>Algorithm will simulate a predetermined number of battles and display average statistics. </p>
+<p><strong>Attention</strong>, a lot of battles will lead to long-term calculation.</p>
+<p>After select all parameters, press &quot;Run Battle&quot; for get results.</p>
+<h1>Races</h1>
+<p>Select race for play by randomly.</p>
+<p>Select the probability of selection of each race and press &quot;Get random race&quot; for get results.</p>		</div>
 		<!-- /ABOUT -->
 
 		<!-- CANNONS -->
@@ -640,7 +657,7 @@ Algorithm will simulate a predetermined number of battles and display average st
 				
 		<div class="panel panel-default battle-side">
 			<div class="panel-body panel-visible">
-				<div class="row btn-group col-xs-12">
+				<div class="btn-group col-xs-12">
 					<button id="battle_first_side_attack" class="btn col-xs-6 button-radio btn-danger" data-value="1" data-side="attack" data-class="btn-danger">Attack</button>
 					<button id="battle_first_side_defence" class="btn col-xs-6 button-radio " data-value="0" data-side="defence" data-class="btn-success">Defence</button>
 				</div>
@@ -1130,7 +1147,7 @@ Algorithm will simulate a predetermined number of battles and display average st
 				
 		<div class="panel panel-default battle-side">
 			<div class="panel-body panel-visible">
-				<div class="row btn-group col-xs-12">
+				<div class="btn-group col-xs-12">
 					<button id="battle_first_side_attack" class="btn col-xs-6 button-radio " data-value="0" data-side="attack" data-class="btn-danger">Attack</button>
 					<button id="battle_first_side_defence" class="btn col-xs-6 button-radio btn-success" data-value="1" data-side="defence" data-class="btn-success">Defence</button>
 				</div>
@@ -1142,7 +1159,7 @@ Algorithm will simulate a predetermined number of battles and display average st
 			<div class="panel panel-default battle-side">
 				<div class="panel-heading">Number of battles calculation</div>
 				<div class="panel-body panel-visible">
-					<div class="row btn-group col-xs-12 game-counter" data-list="1,10,25,50,100,250,500,1000,2500,5000,10000,25000,50000,100000">
+					<div class="btn-group col-xs-12 game-counter" data-list="1,10,25,50,100,250,500,1000,2500,5000,10000,25000,50000,100000">
 						<button class="btn btn-primary game-counter-minus col-xs-4">-</button>
 						<button class="btn btn-primary game-counter-value col-xs-4 active" id="battle_number" data-value="7">1000</button>
 						<button class="btn btn-primary game-counter-plus col-xs-4">+</button>
@@ -1159,6 +1176,106 @@ Algorithm will simulate a predetermined number of battles and display average st
 			<div class="row battle-result" id="battle_result"><i>Click "Run Battle" for get results</i></div>
 		</div>
 		<!-- /BATTLE -->
+
+		<!-- RACES -->
+		<div class="tab-pane" id="races">
+			<div class="row" id="race_percents">
+				
+		<div class="btn-group-vertical btn-group-lg col-xs-4 col-sm-3 col-md-2 game-counter game-counter-race"
+			 data-list="0%,20%,40%,60%,80%,100%,120%,140%,160%,180%,200%">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-img active"><img src="img/EridaniEmpire.png"></button>
+			<button class="btn game-counter-value active" id="race_1" data-value="5">100%</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+						
+		<div class="btn-group-vertical btn-group-lg col-xs-4 col-sm-3 col-md-2 game-counter game-counter-race"
+			 data-list="0%,20%,40%,60%,80%,100%,120%,140%,160%,180%,200%">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-img active"><img src="img/HydranProgress.png"></button>
+			<button class="btn game-counter-value active" id="race_2" data-value="5">100%</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+						
+		<div class="btn-group-vertical btn-group-lg col-xs-4 col-sm-3 col-md-2 game-counter game-counter-race"
+			 data-list="0%,20%,40%,60%,80%,100%,120%,140%,160%,180%,200%">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-img active"><img src="img/Planta.png"></button>
+			<button class="btn game-counter-value active" id="race_3" data-value="5">100%</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+						
+		<div class="btn-group-vertical btn-group-lg col-xs-4 col-sm-3 col-md-2 game-counter game-counter-race"
+			 data-list="0%,20%,40%,60%,80%,100%,120%,140%,160%,180%,200%">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-img active"><img src="img/DescendantsOfDraco.png"></button>
+			<button class="btn game-counter-value active" id="race_4" data-value="5">100%</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+						
+		<div class="btn-group-vertical btn-group-lg col-xs-4 col-sm-3 col-md-2 game-counter game-counter-race"
+			 data-list="0%,20%,40%,60%,80%,100%,120%,140%,160%,180%,200%">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-img active"><img src="img/Mechanema.png"></button>
+			<button class="btn game-counter-value active" id="race_5" data-value="5">100%</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+						
+		<div class="btn-group-vertical btn-group-lg col-xs-4 col-sm-3 col-md-2 game-counter game-counter-race"
+			 data-list="0%,20%,40%,60%,80%,100%,120%,140%,160%,180%,200%">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-img active"><img src="img/OrionHegemony.png"></button>
+			<button class="btn game-counter-value active" id="race_6" data-value="5">100%</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+						
+		<div class="btn-group-vertical btn-group-lg col-xs-4 col-sm-3 col-md-2 game-counter game-counter-race"
+			 data-list="0%,20%,40%,60%,80%,100%,120%,140%,160%,180%,200%">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-img active"><img src="img/Exiles.png"></button>
+			<button class="btn game-counter-value active" id="race_7" data-value="5">100%</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+						
+		<div class="btn-group-vertical btn-group-lg col-xs-4 col-sm-3 col-md-2 game-counter game-counter-race"
+			 data-list="0%,20%,40%,60%,80%,100%,120%,140%,160%,180%,200%">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-img active"><img src="img/RhoIndiSyndicate.png"></button>
+			<button class="btn game-counter-value active" id="race_8" data-value="5">100%</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+						
+		<div class="btn-group-vertical btn-group-lg col-xs-4 col-sm-3 col-md-2 game-counter game-counter-race"
+			 data-list="0%,20%,40%,60%,80%,100%,120%,140%,160%,180%,200%">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-img active"><img src="img/EnlightenedOfLyra.png"></button>
+			<button class="btn game-counter-value active" id="race_9" data-value="5">100%</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+						
+		<div class="btn-group-vertical btn-group-lg col-xs-4 col-sm-3 col-md-2 game-counter game-counter-race"
+			 data-list="0%,20%,40%,60%,80%,100%,120%,140%,160%,180%,200%">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-img active"><img src="img/WardensOfMagellan.png"></button>
+			<button class="btn game-counter-value active" id="race_10" data-value="5">100%</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+						
+		<div class="btn-group-vertical btn-group-lg col-xs-4 col-sm-3 col-md-2 game-counter game-counter-race"
+			 data-list="0%,20%,40%,60%,80%,100%,120%,140%,160%,180%,200%">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-img active"><img src="img/TerranFederation.png"></button>
+			<button class="btn game-counter-value active" id="race_11" data-value="5">100%</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+					</div>
+			<div class="row">
+				<button class="btn btn-lg btn-primary col-xs-12" id="race_run">Get random race</button>
+			</div>
+			<h2>Selected race</h2>
+			<div class="race-result" id="race_result"></div>
+		</div>
+		<!-- /RACES -->
 	</div>
 </div>
 

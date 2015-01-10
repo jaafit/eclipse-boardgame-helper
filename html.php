@@ -7,6 +7,7 @@
 	<title>Eclipse Helper</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
 	<link rel="stylesheet" href="css/style.css">
+	<link rel="icon" type="image/png" href="img/icon.png">
 </head>
 <body>
 
@@ -16,15 +17,21 @@
 		<li><a href="#cannons" data-toggle="tab">Cannons</a></li>
 		<li><a href="#dices" data-toggle="tab">Dices</a></li>
 		<li><a href="#battle" data-toggle="tab">Battle</a></li>
+		<li><a href="#races" data-toggle="tab">Races</a></li>
 	</ul>
 </nav>
 
 <div class="container">
 	<div class="tab-content">
 		<!-- ABOUT -->
-		<?php require_once __DIR__ . '/markdown.php'; ?>
+		<?php
+			require_once __DIR__ . '/Parsedown.php';
+			$readme = file(__DIR__ . '/README.md');
+			unset($readme[2]);
+			$readme = implode(PHP_EOL, $readme);
+		?>
 		<div class="tab-pane active" id="about">
-			<?= Markdown(file_get_contents(__DIR__ . '/README.md')); ?>
+			<?= (new Parsedown())->text($readme); ?>
 		</div>
 		<!-- /ABOUT -->
 
@@ -86,7 +93,7 @@
 			<div class="panel panel-default battle-side">
 				<div class="panel-heading">Number of battles calculation</div>
 				<div class="panel-body panel-visible">
-					<div class="row btn-group col-xs-12 game-counter" data-list="1,10,25,50,100,250,500,1000,2500,5000,10000,25000,50000,100000">
+					<div class="btn-group col-xs-12 game-counter" data-list="1,10,25,50,100,250,500,1000,2500,5000,10000,25000,50000,100000">
 						<button class="btn btn-primary game-counter-minus col-xs-4">-</button>
 						<button class="btn btn-primary game-counter-value col-xs-4 active" id="battle_number" data-value="7">1000</button>
 						<button class="btn btn-primary game-counter-plus col-xs-4">+</button>
@@ -103,6 +110,29 @@
 			<div class="row battle-result" id="battle_result"><i>Click "Run Battle" for get results</i></div>
 		</div>
 		<!-- /BATTLE -->
+
+		<!-- RACES -->
+		<div class="tab-pane" id="races">
+			<div class="row" id="race_percents">
+				<?= counterRace('race_1', 'img/EridaniEmpire.png') ?>
+				<?= counterRace('race_2', 'img/HydranProgress.png') ?>
+				<?= counterRace('race_3', 'img/Planta.png') ?>
+				<?= counterRace('race_4', 'img/DescendantsOfDraco.png') ?>
+				<?= counterRace('race_5', 'img/Mechanema.png') ?>
+				<?= counterRace('race_6', 'img/OrionHegemony.png') ?>
+				<?= counterRace('race_7', 'img/Exiles.png') ?>
+				<?= counterRace('race_8', 'img/RhoIndiSyndicate.png') ?>
+				<?= counterRace('race_9', 'img/EnlightenedOfLyra.png') ?>
+				<?= counterRace('race_10', 'img/WardensOfMagellan.png') ?>
+				<?= counterRace('race_11', 'img/TerranFederation.png') ?>
+			</div>
+			<div class="row">
+				<button class="btn btn-lg btn-primary col-xs-12" id="race_run">Get random race</button>
+			</div>
+			<h2>Selected race</h2>
+			<div class="race-result" id="race_result"></div>
+		</div>
+		<!-- /RACES -->
 	</div>
 </div>
 
@@ -138,6 +168,18 @@ function counter($id, $size = 3, $class = '', $default = 0, $large = true, $labe
 		</div>
 		', $size, $class, $id, $default, $default);
 	}
+}
+
+function counterRace($id, $imgSrc = '') {
+	return sprintf('
+		<div class="btn-group-vertical btn-group-lg col-xs-4 col-sm-3 col-md-2 game-counter game-counter-race"
+			 data-list="0%%,20%%,40%%,60%%,80%%,100%%,120%%,140%%,160%%,180%%,200%%">
+			<button class="btn game-counter-plus">+</button>
+			<button class="btn game-counter-img active"><img src="%s"></button>
+			<button class="btn game-counter-value active" id="%s" data-value="5">100%%</button>
+			<button class="btn game-counter-minus">-</button>
+		</div>
+		', $imgSrc, $id);
 }
 
 function battleShip($idPrefix, $title = 'Ships', array $defaults = array())
@@ -193,7 +235,7 @@ function battleSide($idPrefix, $attack = false)
 	return '
 		<div class="panel panel-default battle-side">
 			<div class="panel-body panel-visible">
-				<div class="row btn-group col-xs-12">
+				<div class="btn-group col-xs-12">
 					' . battleSideButton($idPrefix, true, $attack) . '
 					' . battleSideButton($idPrefix, false, $attack) . '
 				</div>

@@ -1,4 +1,4 @@
-Mini web application for [boardgame Eclipse](http://boardgamegeek.com/boardgame/72125/eclipse)
+Mini application for [boardgame Eclipse](http://boardgamegeek.com/boardgame/72125/eclipse)
 
 [**Demo**](http://eclipse.mal.by)
 
@@ -49,3 +49,8 @@ Algorithm will simulate a predetermined number of battles and display average st
 **Attention**, a lot of battles will lead to long-term calculation.
 
 After select all parameters, press "Run Battle" for get results.
+
+# Races
+
+Select race for play by randomly.
+Select the probability of selection of each race and press "Get random race" for get results.

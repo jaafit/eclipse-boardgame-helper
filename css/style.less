@@ -2,7 +2,11 @@
 @import "../less/variables.less";
 @import "../less/bootstrap.less";
 
-@grid-float-breakpoint: 0px;
+@grid-float-breakpoint: 380px;
+
+html, body {
+  min-width: 320px;
+}
 
 .row {
   margin-top: @padding-base-vertical;
@@ -60,6 +64,26 @@
   .game-counter {
     width: 100%;
   }
+}
+
+.game-counter-race {
+  margin-bottom: @modal-inner-padding;
+
+  .btn, &.btn, &.game-dice {
+    background: #000;
+    color: #fff;
+  }
+}
+
+.game-counter-img img {
+  max-height: 120px;
+  max-width: 100%;
+}
+
+.race-result {
+  margin: 25px 0;
+  text-align: center;
+  height: 195px;
 }
 
 @colorIon: #ffd402;

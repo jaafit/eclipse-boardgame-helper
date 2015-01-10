@@ -128,6 +128,105 @@
     });
 
 
+    // Races page
+    var $raceRun = $('#race_run'),
+        $raceResult = $('#race_result'),
+        raceRunPause = 3000,
+        raceProcess = false;
+    $raceRun.on('click', function() {
+        if (raceProcess) {
+            return;
+        }
+        raceProcess = true;
+        setTimeout(function() {
+            $raceRun.removeClass('btn-primary');
+        }, 0);
+
+
+        var $racePercents = $('#race_percents'),
+            percents = {},
+            sumPercents = 0;
+
+        $racePercents.find('.game-counter-value').each(function() {
+            var $this = $(this),
+                value = parseInt($(this).html());
+            percents[$this.attr('id')] = value;
+            sumPercents += value;
+        });
+
+        var random = rand() * sumPercents,
+            compareValue = 0,
+            raceId;
+
+        for (raceId in percents) {
+            compareValue += percents[raceId];
+            if (random < compareValue) {
+                break;
+            }
+        }
+
+        $raceResult.html('<img src="' + getRaceImgById(raceId) + '">');
+
+        setTimeout(function() {
+            $raceRun.addClass('btn-primary');
+            raceProcess = false;
+        }, raceRunPause);
+    });
+
+    function getRaceImgById(raceId) {
+        switch (raceId) {
+            case 'race_1':
+                return 'img/EridaniEmpire.png';
+            case 'race_2':
+                return 'img/HydranProgress.png';
+            case 'race_3':
+                return 'img/Planta.png';
+            case 'race_4':
+                return 'img/DescendantsOfDraco.png';
+            case 'race_5':
+                return 'img/Mechanema.png';
+            case 'race_6':
+                return 'img/OrionHegemony.png';
+            case 'race_7':
+                return 'img/Exiles.png';
+            case 'race_8':
+                return 'img/RhoIndiSyndicate.png';
+            case 'race_9':
+                return 'img/EnlightenedOfLyra.png';
+            case 'race_10':
+                switch (randInt(3, 1)) {
+                    case 1:
+                        return 'img/WardensOfMagellan.png';
+                    case 2:
+                        return 'img/SentinelsOfMagellan.png';
+                    case 3:
+                        return 'img/KeepersOfMagellan.png';
+                    default:
+                        return 'img/WardensOfMagellan.png';
+                }
+            case 'race_11':
+            default:
+                switch (randInt(6, 1)) {
+                    case 1:
+                        return 'img/TerranDirectorate.png';
+                    case 2:
+                        return 'img/TerranFederation.png';
+                    case 3:
+                        return 'img/TerranUnion.png';
+                    case 4:
+                        return 'img/TerranRepublic.png';
+                    case 5:
+                        return 'img/TerranConglomerate.png';
+                    case 6:
+                        return 'img/TerranAlliance.png';
+                    default:
+                        return 'img/TerranFederation.png';
+                }
+        }
+    }
+    $('a[href="#races"]').click();
+
+
     // Battle page
     var shipTypes = ['interceptor','cruiser','dreadnought','starbase'],
         $battleRun = $('#battle_run'),
@@ -996,7 +1095,9 @@
     function prob(p, m, n) { return Math.pow(p, m) * Math.pow(1-p, n-m); }
     function comb(m, n) { return fact(n) / (fact(m) * fact(n - m)); }
     function fact(n) { var v = 1; for (var i = 2; i <= n; i++) v = v * i; return v; }
-    function dice() { return Math.floor(Math.random() * 6) + 1; }
+    function dice() { return randInt(6, 1); }
+    function rand() { return Math.random(); }
+    function randInt(max, min) { return Math.floor(rand() * def(max, 1)) + def(min, 0); }
     function sleep(ms) { ms += new Date().getTime(); while (new Date() < ms) {} }
     function round(v, n) { return Math.round(v * Math.pow(10, n)) / Math.pow(10, n); }
     function clone(obj) {
