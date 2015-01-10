@@ -23,6 +23,12 @@
 		<!-- CANNONS -->
 		<div class="tab-pane active" id="cannons">
 			<div class="row">
+				<div class="col-xs-3 game-counter-label">Ion</div>
+				<div class="col-xs-3 game-counter-label">Plasma</div>
+				<div class="col-xs-3 game-counter-label">Antimatter</div>
+				<div class="col-xs-3 game-counter-label">Computers - Shields</div>
+			</div>
+			<div class="row">
 				<?= counter('cannons_ion', 3, 'game-ion') ?>
 				<?= counter('cannons_plasma', 3, 'game-plasma') ?>
 				<?= counter('cannons_antimatter', 3, 'game-antimatter') ?>
@@ -74,7 +80,7 @@
 				<div class="panel-body panel-visible">
 					<div class="row btn-group col-xs-12 game-counter" data-list="1,10,25,50,100,250,500,1000,2500,5000,10000,25000,50000,100000">
 						<button class="btn btn-primary game-counter-minus col-xs-4">-</button>
-						<button class="btn btn-primary game-counter-value col-xs-4 active" id="battle_count" data-value="7">1000</button>
+						<button class="btn btn-primary game-counter-value col-xs-4 active" id="battle_number" data-value="7">1000</button>
 						<button class="btn btn-primary game-counter-plus col-xs-4">+</button>
 					</div>
 				</div>
@@ -84,6 +90,7 @@
 				<button class="btn btn-lg btn-primary col-xs-12" id="battle_run">Run Battle</button>
 			</div>
 
+			<a name="results" id="battle_result_anchor"></a>
 			<h2>Results</h2>
 			<div class="row battle-result" id="battle_result"><i>Click "Run Battle" for get results</i></div>
 		</div>
@@ -100,16 +107,29 @@
 
 <?php
 
-function counter($id, $size = 3, $class = '', $default = 0, $large = true)
+function counter($id, $size = 3, $class = '', $default = 0, $large = true, $label = null, $blockClass = '')
 {
 	if ($large) { $class .= ' btn-group-lg'; }
-	return sprintf('
+	if ($label) {
+		return sprintf('
+		<div class="col-xs-%d game-counter-block %s">
+			<div class="game-counter-label">%s</div>
+			<div class="btn-group-vertical game-counter %s">
+				<button class="btn game-counter-plus">+</button>
+				<button class="btn game-counter-value active" id="%s" data-value="%d">%d</button>
+				<button class="btn game-counter-minus">-</button>
+			</div>
+		</div>
+		', $size, $blockClass, $label, $class, $id, $default, $default);
+	} else {
+		return sprintf('
 		<div class="btn-group-vertical col-xs-%d game-counter %s">
 			<button class="btn game-counter-plus">+</button>
 			<button class="btn game-counter-value active" id="%s" data-value="%d">%d</button>
 			<button class="btn game-counter-minus">-</button>
 		</div>
-	', $size, $class, $id, $default, $default);
+		', $size, $class, $id, $default, $default);
+	}
 }
 
 function battleShip($idPrefix, $title = 'Ships', array $defaults = array())
@@ -119,20 +139,12 @@ function battleShip($idPrefix, $title = 'Ships', array $defaults = array())
 			<div class="panel-heading">' . $title . '<button class="btn clear-btn pull-right">Clear</button></div>
 			<div class="panel-body">
 				<div class="row">
-					<div class="col-xs-2 game-counter-label">Count</div>
-					<div class="col-xs-2 game-counter-label">Morph</div>
-					<div class="col-xs-2 game-counter-label">Hull</div>
-					<div class="col-xs-2 game-counter-label">Computer</div>
-					<div class="col-xs-2 game-counter-label">Shield</div>
-					<div class="col-xs-2 game-counter-label">Initiative</div>
-				</div>
-				<div class="row">
-					' . counter($idPrefix . '_count', 2, '', (int)@$defaults['count'], false) . '
-					' . counter($idPrefix . '_morph', 2, '', (int)@$defaults['morph'], false) . '
-					' . counter($idPrefix . '_hull', 2, '', (int)@$defaults['hull'], false) . '
-					' . counter($idPrefix . '_computer', 2, 'game-computer', (int)@$defaults['computer'], false) . '
-					' . counter($idPrefix . '_shield', 2, 'game-shield', (int)@$defaults['shield'], false) . '
-					' . counter($idPrefix . '_initiative', 2, '', (int)@$defaults['initiative'], false) . '
+					' . counter($idPrefix . '_number', 2, '', (int)@$defaults['number'], false, 'Number') . '
+					' . counter($idPrefix . '_hull', 2, '', (int)@$defaults['hull'], false, 'Hull') . '
+					' . counter($idPrefix . '_morph', 2, '', (int)@$defaults['morph'], false, 'Morph') . '
+					' . counter($idPrefix . '_computer', 2, 'game-computer', (int)@$defaults['computer'], false, 'Computer') . '
+					' . counter($idPrefix . '_shield', 2, 'game-shield', (int)@$defaults['shield'], false, 'Shield') . '
+					' . counter($idPrefix . '_initiative', 2, '', (int)@$defaults['initiative'], false, 'Initiative') . '
 				</div>
 
 				<div class="row">

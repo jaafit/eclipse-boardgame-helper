@@ -132,6 +132,8 @@
     var shipTypes = ['interceptor','cruiser','dreadnought','starbase'],
         $battleRun = $('#battle_run'),
         $battleResult = $('#battle_result'),
+        $battleResultAnchor = $('#battle_result_anchor'),
+        resultsNumber = 0,
         battleCalcProcess = false;
 
     $battleRun.on('click', function(){
@@ -140,14 +142,14 @@
         }
         battleCalcProcess = true;
         $battleRun.removeClass('btn-primary');
-        $battleResult.html('<i>processing</i>');
+        $battleResult.html('<div style="height: ' + $battleResult.height() + 'px"><i>processing</i></div>');
 
         setTimeout(battleRun, 1);
     });
 
     function battleRun() {
         var technologies = ['antimatter_splitter','distortion_shield','point_defence'],
-            fields = ['count','hull','morph','computer','shield','initiative',
+            fields = ['number','hull','morph','computer','shield','initiative',
                 'cannon_ion','cannon_plasma','cannon_antimatter','rocket_ion','rocket_plasma','rocket_antimatter'];
 
         var parseArmy = function(idPrefix) {
@@ -177,9 +179,9 @@
 
         var firstArmy = parseArmy('battle_first');
         var secondArmy = parseArmy('battle_second');
-        var count = parseInt($('#battle_count').html()) || 1000;
+        var number = parseInt($('#battle_number').html()) || 1000;
 
-        var results = calcBattles(firstArmy, secondArmy, count);
+        var results = calcBattles(firstArmy, secondArmy, number);
 
 
         var width = (results.winner[0] && results.winner[-1]) ? 3 : ((results.winner[0] || results.winner[-1]) ? 4 : 6);
@@ -202,13 +204,13 @@
         html += '</tr></thead>';
         html += '<tbody><tr>';
 
-        html += '<td>' + round(100 * results.winner[1] / count, 1) + '&nbsp;%</td>';
-        html += '<td>' + round(100 * results.winner[2] / count, 1) + '&nbsp;%</td>';
+        html += '<td>' + round(100 * results.winner[1] / number, 1) + '&nbsp;%</td>';
+        html += '<td>' + round(100 * results.winner[2] / number, 1) + '&nbsp;%</td>';
         if (results.winner[0]) {
-            html += '<td>' + round(100 * results.winner[0] / count, 1) + '&nbsp;%</td>';
+            html += '<td>' + round(100 * results.winner[0] / number, 1) + '&nbsp;%</td>';
         }
         if (results.winner[-1]) {
-            html += '<td>' + round(100 * results.winner[-1] / count, 1) + '&nbsp;%</td>';
+            html += '<td>' + round(100 * results.winner[-1] / number, 1) + '&nbsp;%</td>';
         }
 
         html += '</tr></tbody>';
@@ -232,18 +234,20 @@
         $battleResult.html(html);
         $battleRun.addClass('btn-primary');
         battleCalcProcess = false;
-    }
 
-    //$('#battle_first_interceptor_count, #battle_second_interceptor_count')
-    //    .closest('.battle-ship-group').find('.panel-heading')
-    //    .append('<button class="btn default-ancient-button pull-right">Ancient</button>');
+        setTimeout(function() {
+            var anchor = 'results' + ++resultsNumber;
+            $battleResultAnchor.attr('name', anchor);
+            window.location.hash = anchor;
+        }, 1);
+    }
 
 
 
     // Logic functions
 
     /**
-     * @param n   Count dices
+     * @param n   Number of dices
      * @param p   Probability
      * @param sum Summary probability
      */
@@ -588,16 +592,16 @@
             self.ships = [];
             attrs = attrs || self.initAttrs;
 
-            for (var i = 0, ii = attrs.interceptor.count || 0; i < ii; ++i) {
+            for (var i = 0, ii = attrs.interceptor.number || 0; i < ii; ++i) {
                 self.ships.push(new Interceptor(attrs.interceptor));
             }
-            for (var i = 0, ii = attrs.cruiser.count || 0; i < ii; ++i) {
+            for (var i = 0, ii = attrs.cruiser.number || 0; i < ii; ++i) {
                 self.ships.push(new Cruiser(attrs.cruiser));
             }
-            for (var i = 0, ii = attrs.dreadnought.count || 0; i < ii; ++i) {
+            for (var i = 0, ii = attrs.dreadnought.number || 0; i < ii; ++i) {
                 self.ships.push(new Dreadnought(attrs.dreadnought));
             }
-            for (var i = 0, ii = attrs.starbase.count || 0; i < ii; ++i) {
+            for (var i = 0, ii = attrs.starbase.number || 0; i < ii; ++i) {
                 self.ships.push(new Starbase(attrs.starbase));
             }
 
@@ -823,15 +827,15 @@
                     hits.sort(function (a, b) { return parseInt(a) - parseInt(b); });
                     var bestDamages = damagesByHit.get(hits[0]);
                     bestDamages.sort(function (a, b) { return a.count() - b.count() });
-                    damages = bestDamages[0];
+                    collection = bestDamages[0];
                 }
             }
 
             if (remove) {
-                this.remove(damages.all());
+                this.remove(collection.all());
             }
 
-            return new DamageCollection(damages);
+            return new DamageCollection(collection);
         };
 
         /** @deprecated */
@@ -901,12 +905,12 @@
             winner: {0: 0, 1: 0, 2: 0, '-1': 0},
             firstArmy: {interceptor: 0, cruiser: 0, dreadnought: 0, starbase: 0},
             secondArmy: {interceptor: 0, cruiser: 0, dreadnought: 0, starbase: 0},
-            count: 0
+            number: 0
         };
 
         for (var i = 0, result; i < count; ++i) {
             result = calcBattle(firstArmy, secondArmy, order);
-            ++results.count;
+            ++results.number;
             ++results.winner[result];
 
             if (!firstArmy.isDestroy()) {
@@ -922,7 +926,7 @@
             }
         }
 
-        if (results.count > 0) {
+        if (results.number > 0) {
             for (var i in results.firstArmy) {
                 results.firstArmy[i] = results.firstArmy[i] / count;
             }

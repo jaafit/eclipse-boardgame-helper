@@ -6327,6 +6327,12 @@ button.close {
   text-overflow: clip;
   overflow: hidden;
 }
+.game-counter-block {
+  padding: 5px;
+}
+.game-counter-block .game-counter {
+  width: 100%;
+}
 .game-ion .btn,
 .game-ion.btn,
 .game-ion.game-dice {
