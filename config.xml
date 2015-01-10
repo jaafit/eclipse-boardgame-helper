@@ -12,7 +12,6 @@
     <author href="http://eclipse.mal.by" email="morgen@a-ka.net">Negromovich</author>
 
     <gap:platform name="android" />
-    <gap:platform name="winphone" />
 
     <icon src="img/icon.png" />
 

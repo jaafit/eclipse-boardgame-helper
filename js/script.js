@@ -224,7 +224,6 @@
                 }
         }
     }
-    $('a[href="#races"]').click();
 
 
     // Battle page
