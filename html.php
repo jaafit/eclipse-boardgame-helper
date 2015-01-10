@@ -12,7 +12,8 @@
 
 <nav class="navbar navbar-default" role="navigation">
 	<ul class="nav navbar-nav">
-		<li class="active"><a href="#cannons" data-toggle="tab">Cannons</a></li>
+		<li class="active"><a href="#about" data-toggle="tab">About</a></li>
+		<li><a href="#cannons" data-toggle="tab">Cannons</a></li>
 		<li><a href="#dices" data-toggle="tab">Dices</a></li>
 		<li><a href="#battle" data-toggle="tab">Battle</a></li>
 	</ul>
@@ -20,8 +21,15 @@
 
 <div class="container">
 	<div class="tab-content">
+		<!-- ABOUT -->
+		<?php require_once __DIR__ . '/markdown.php'; ?>
+		<div class="tab-pane active" id="about">
+			<?= Markdown(file_get_contents(__DIR__ . '/README.md')); ?>
+		</div>
+		<!-- /ABOUT -->
+
 		<!-- CANNONS -->
-		<div class="tab-pane active" id="cannons">
+		<div class="tab-pane" id="cannons">
 			<div class="row">
 				<div class="col-xs-3 game-counter-label">Ion</div>
 				<div class="col-xs-3 game-counter-label">Plasma</div>

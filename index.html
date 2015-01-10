@@ -10,7 +10,8 @@
 
 <nav class="navbar navbar-default" role="navigation">
 	<ul class="nav navbar-nav">
-		<li class="active"><a href="#cannons" data-toggle="tab">Cannons</a></li>
+		<li class="active"><a href="#about" data-toggle="tab">About</a></li>
+		<li><a href="#cannons" data-toggle="tab">Cannons</a></li>
 		<li><a href="#dices" data-toggle="tab">Dices</a></li>
 		<li><a href="#battle" data-toggle="tab">Battle</a></li>
 	</ul>
@@ -18,8 +19,74 @@
 
 <div class="container">
 	<div class="tab-content">
+		<!-- ABOUT -->
+				<div class="tab-pane active" id="about">
+			<p>Mini web application for <a href="http://boardgamegeek.com/boardgame/72125/eclipse">boardgame Eclipse</a></p>
+
+<p><a href="http://eclipse.mal.by"><strong>Demo</strong></a></p>
+
+<h1>Cannons</h1>
+
+<p>Calculation the probability of hits to the opponent.
+Select number of cannons or rockets and set bonus. Press "Calc" for get results.</p>
+
+<p>Types of counter:</p>
+
+<ul>
+<li>Ion (yellow) - number of ion cannons or rockets</li>
+<li>Plasma (orange) - number of plasma cannons or rockets</li>
+<li>Antimatter (red) - number of antimatter cannons or rockets</li>
+<li>Bonus (white) - bonus of computers, considering opponent's shields</li>
+</ul>
+
+<h1>Dices</h1>
+
+<p>Simulation throw of dices.
+Select number of dices of each color. Press "Throw" for get results.</p>
+
+<h1>Battle</h1>
+
+<p>Calculation the probability of winning the battle.
+Also, you can simulate one battle and get results.</p>
+
+<p>Enter the parameters of each army using the characteristics of ships and their number. 
+Also choose which technologies have each army and attacking or defending side.</p>
+
+<p>Ships characteristics:</p>
+
+<ul>
+<li>Number - number of ships of this type</li>
+<li>Hull - number of hulls</li>
+<li>Morph - number of Morph Shields</li>
+<li>Computer (white) - number of computers</li>
+<li>Shield (black) - number of shields</li>
+<li>Initiative - number of initiative</li>
+<li>Cannons:
+
+<ul>
+<li>Ion (yellow) - number of ion cannons</li>
+<li>Plasma (orange) - number of plasma cannons</li>
+<li>Antimatter (red) - number of antimatter cannons</li>
+</ul></li>
+<li>Rockets (on a standard module is 2 rocket; need enter 2, not 1, for each module):
+
+<ul>
+<li>Ion (yellow) - number of ion rockets</li>
+<li>Plasma (orange) - number of plasma rockets</li>
+<li>Antimatter (red) - number of antimatter rockets</li>
+</ul></li>
+</ul>
+
+<p>Select number of battles calculation.
+Algorithm will simulate a predetermined number of battles and display average statistics. 
+<strong>Attention</strong>, a lot of battles will lead to long-term calculation.</p>
+
+<p>After select all parameters, press "Run Battle" for get results.</p>
+		</div>
+		<!-- /ABOUT -->
+
 		<!-- CANNONS -->
-		<div class="tab-pane active" id="cannons">
+		<div class="tab-pane" id="cannons">
 			<div class="row">
 				<div class="col-xs-3 game-counter-label">Ion</div>
 				<div class="col-xs-3 game-counter-label">Plasma</div>
