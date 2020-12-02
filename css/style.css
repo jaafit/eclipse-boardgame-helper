@@ -6365,6 +6365,16 @@ body {
 .game-plasma.game-dice {
   background: #f68b1f;
 }
+.game-rift .btn,
+.game-rift.btn,
+.game-rift.game-dice {
+  background: #c6004d;
+}
+.game-soliton .btn,
+.game-soliton.btn,
+.game-soliton.game-dice {
+  background: #0073bb;
+}
 .game-antimatter .btn,
 .game-antimatter.btn,
 .game-antimatter.game-dice {

@@ -17,11 +17,24 @@
     });
 
     $body.on('click', '.panel .panel-heading', function() {
-        $(this).siblings('.panel-body').slideToggle();
+        var a = $(this).siblings('.panel-body').find('.game-number .active');
+        if (!$(this).siblings('.panel-body').is(':visible')) {
+            $(this).siblings('.panel-body').slideDown();
+            a.html(1); // change ship count to 1 upon showing
+            a.data('value', '1');
+        }
+        else {
+            $(this).siblings('.panel-body').slideUp();
+            a.html(0); // change ship count to 0 upon hiding
+            a.data('value', '0');
+        }
+
     });
 
     $body.on('click', '.clear-btn', function() {
         $(this).closest('.clear-group').find('.game-counter-value').html(0);
+        $(this).closest('.clear-group').find('.game-counter-value').data('value', 0);
+        return false; // don't also toggle visible
     });
 
     $body.on('click', '.button-checkbox', function() {
@@ -70,11 +83,13 @@
     $('#cannons_calc').on('click', function(){
         var cannonsIon = parseInt($('#cannons_ion').html()) || 0,
             cannonsPlasma = parseInt($('#cannons_plasma').html()) || 0,
+            cannonsSoliton = parseInt($('#cannons_soliton').html()) || 0,
             cannonsAntimatter = parseInt($('#cannons_antimatter').html()) || 0,
+            cannonsRift = parseInt($('#cannons_rift').html()) || 0,
             cannonsComputer = parseInt($('#cannons_computer').html()) || 0;
 
         var probability = ((cannonsComputer > 4 ? 4 : cannonsComputer) + 1) / 6,
-            calc = calcDicesMulti(cannonsIon, cannonsPlasma, cannonsAntimatter, probability),
+            calc = calcDicesMulti(cannonsIon, cannonsPlasma, cannonsSoliton, cannonsAntimatter, cannonsRift, probability),
             html = '';
 
         html += '<table class="table table-striped table-align-center">';
@@ -104,7 +119,9 @@
 
         var dicesIon = parseInt($('#dices_ion').html()) || 0,
             dicesPlasma = parseInt($('#dices_plasma').html()) || 0,
+            dicesSoliton = parseInt($('#dices_soliton').html()) || 0,
             dicesAntimatter = parseInt($('#dices_antimatter').html()) || 0,
+            dicesRift = parseInt($('#dices_rift').html()) || 0,
             i, html = '',
             $result = $('#dices_result');
 
@@ -120,9 +137,21 @@
         for (i = 0; i < dicesPlasma; i++) {
             html += '<div class="game-dice game-plasma">' + dice() + '</div>';
         }
+        for (i = 0; i < dicesSoliton; i++) {
+            html += '<div class="game-dice game-soliton">' + dice() + '</div>';
+        }
         for (i = 0; i < dicesAntimatter; i++) {
             html += '<div class="game-dice game-antimatter">' + dice() + '</div>';
         }
+        for (i = 0; i < dicesRift; i++) {
+            var side = dice();
+            var hits = Math.max(0, side-3);
+            var backfire = (side === 6 || side === 3) && '-1' || '';
+            if (hits === 0 && backfire === '-1')
+                hits = '';
+            html += '<div class="game-dice game-rift">' + hits+backfire + '</div>';
+        }
+
 
         setTimeout(function(){ $result.html(html); }, dicesPause);
     });
@@ -248,38 +277,38 @@
     function battleRun() {
         var technologies = ['antimatter_splitter','distortion_shield','point_defence'],
             fields = ['number','hull','morph','computer','shield','initiative',
-                'cannon_ion','cannon_plasma','cannon_antimatter','rocket_ion','rocket_plasma','rocket_antimatter'];
+                'cannon_ion','cannon_plasma','cannon_rift','cannon_antimatter','missile_ion','missile_plasma','missile_antimatter'];
 
-        var parseArmy = function(idPrefix) {
-            var army = {};
+        var parseFleet = function(idPrefix) {
+            var fleet = {};
 
             for (var i in shipTypes) {
-                army[shipTypes[i]] = {};
+                fleet[shipTypes[i]] = {};
                 for (var j in fields) {
-                    army[shipTypes[i]][fields[j]] = parseInt($('#' + idPrefix + '_' + shipTypes[i] + '_' + fields[j]).data('value')) || 0;
+                    fleet[shipTypes[i]][fields[j]] = parseInt($('#' + idPrefix + '_' + shipTypes[i] + '_' + fields[j]).data('value')) || 0;
                 }
 
-                army['technologies'] = {};
+                fleet['technologies'] = {};
                 for (var j in technologies) {
-                    army['technologies'][technologies[j]] = parseInt($('#' + idPrefix + '_' + technologies[j]).data('value')) ? true : false;
+                    fleet['technologies'][technologies[j]] = parseInt($('#' + idPrefix + '_' + technologies[j]).data('value')) ? true : false;
                 }
 
-                army['side'] = {attack: false, defence: false};
+                fleet['side'] = {attack: false, defence: false};
                 if (parseInt($('#' + idPrefix + '_side_attack').data('value'))) {
-                    army['side'].attack = true;
+                    fleet['side'].attack = true;
                 } else {
-                    army['side'].defence = true;
+                    fleet['side'].defence = true;
                 }
             }
 
-            return army;
+            return fleet;
         };
 
-        var firstArmy = parseArmy('battle_first');
-        var secondArmy = parseArmy('battle_second');
+        var firstFleet = parseFleet('battle_first');
+        var secondFleet = parseFleet('battle_second');
         var number = parseInt($('#battle_number').html()) || 1000;
 
-        var results = calcBattles(firstArmy, secondArmy, number);
+        var results = calcBattles(firstFleet, secondFleet, number);
 
 
         var width = (results.winner[0] && results.winner[-1]) ? 3 : ((results.winner[0] || results.winner[-1]) ? 4 : 6);
@@ -317,13 +346,13 @@
         // Survivors table
         html += '<h4>Survivors</h4>';
         html += '<table class="table">';
-        html += '<thead><tr><th></th><th>First Army</th><th>Second Army</th></tr></thead>';
+        html += '<thead><tr><th></th><th>First Fleet</th><th>Second Fleet</th></tr></thead>';
         html += '<tbody>';
         for (var i in shipTypes) {
             html += '<tr>' +
             '<td>' + capitalize(shipTypes[i]) + '</td>' +
-            '<td>' + round(results.firstArmy[shipTypes[i]], 2) + '</td>' +
-            '<td>' + round(results.secondArmy[shipTypes[i]], 2) + '</td>' +
+            '<td>' + round(results.firstFleet[shipTypes[i]], 2) + '</td>' +
+            '<td>' + round(results.secondFleet[shipTypes[i]], 2) + '</td>' +
             '</tr>';
         }
         html += '</tbody>';
@@ -349,37 +378,84 @@
      * @param p   Probability
      * @param sum Summary probability
      */
-    function calcDices(n, p, sum) {
-        sum = sum === undefined ? true : !!sum;
+    function calcDices(n, p) {
         var result = [], value = 0;
         for (var m = n + 1; --m;) {
-            value = prob(p, m, n) * comb(m, n) + (sum ? value : 0);
+            value = prob(p, m, n) * comb(m, n);
             result.unshift(value);
         }
         result.unshift(prob(p, m, n) * comb(0, n));
         return result;
     }
 
-    function calcDicesMulti(n1, n2, n4, p, sum) {
+    function calcRift(n) {
+        String.prototype.faceCount = function(f) {
+            return (this.match(new RegExp(f, 'g')) || []).length;
+        };
+        var max = n * 3,
+            result = [],
+            combos = Math.pow(6,n), // how many different rolls are there?
+            hitMap = [];
+
+        if (combos === 0)
+            return [1];
+
+        var powers = []
+        for (var place = 0; place < n; place++)
+            powers.push( Math.pow(6,place)) // precalculate powers (1, 6, 36, 216, etc)
+
+        for (var i = 0; i < combos; i++) {
+            var hits = 0;
+            var source = i;
+            for (var place = n-1; place >= 0; place--) {
+                var power = powers[place]; // 1, 6, 36, etc
+                var face = Math.floor( source / power ); // which face did this die roll?
+                hits += Math.max(0, face-2); // 1, 2 or 3 hits
+                source -= face * power; // save remainder of source/power as source (the source of die faces)
+           }
+
+            if (hitMap[hits] === undefined)
+                hitMap[hits] = 0;
+            hitMap[hits]++;
+
+        }
+
+        for (i = max; i >= 0; i--) {
+            var occurences = hitMap[i] || 0;
+            result.unshift(occurences / combos);
+        }
+        return result;
+
+    }
+
+    function calcDicesMulti(n1, n2, n3, n4, nRift, p, sum) {
         sum = sum === undefined ? true : !!sum;
         var result = [], i,
-            result1 = calcDices(n1, p, false),
-            result2 = calcDices(n2, p, false),
-            result4 = calcDices(n4, p ,false),
-            max = n1 + n2 * 2 + n4 * 4;
+            result1 = calcDices(n1, p),
+            result2 = calcDices(n2, p),
+            result3 = calcDices(n3, p),
+            result4 = calcDices(n4, p),
+            resultRift = calcRift(nRift),
+            max = n1 + n2 * 2 + n3 * 3 + n4 * 4 + nRift * 3;
         for (i = 0; i <= max; i++) {
             result.push(0);
         }
 
-        var value1, value2, value4, key;
+        var value1, value2, value3, value4, valueRift, key;
         for (var i1 in result1) {
             value1 = result1[i1];
             for (var i2 in result2) {
                 value2 = result2[i2];
-                for (var i4 in result4) {
-                    value4 = result4[i4];
-                    key = parseInt(i1) + parseInt(i2) * 2 + parseInt(i4) * 4;
-                    result[key] += value1 * value2 * value4;
+                for (var i3 in result3) {
+                    value3 = result3[i3];
+                    for (var i4 in result4) {
+                        value4 = result4[i4];
+                        for (var ir in resultRift) {
+                            valueRift = resultRift[ir];
+                            key = parseInt(i1) + parseInt(i2) * 2 + parseInt(i3) * 3 + parseInt(i4) * 4 + parseInt(ir);
+                            result[key] += value1 * value2 * value3 * value4 * valueRift;
+                        }
+                    }
                 }
             }
         }
@@ -474,7 +550,7 @@
 
     function Ship() {
         this.params = ['hull','morph','computer','shield','initiative',
-            'cannon_ion','cannon_plasma','cannon_antimatter','rocket_ion','rocket_plasma','rocket_antimatter'];
+            'cannon_ion','cannon_plasma','cannon_soliton','cannon_antimatter','cannon_rift','missile_ion','missile_plasma','missile_antimatter'];
 
         this.default = {};
         this.type = 'ship';
@@ -500,7 +576,12 @@
         };
 
         this.putDamage = function(damage) {
-            this.damage += damage.getHit(this);
+            this.damage += damage.getDamageToShip(this);
+            return this;
+        };
+
+        this.putBackfires = function(bf) {
+            this.damage += bf;
             return this;
         };
 
@@ -512,27 +593,37 @@
             return this.getHealth() - (damage || 0) <= 0;
         };
 
-        this.fire = function(army, fireType) {
-            fireType = fireType == 'rocket' ? 'rocket' : 'cannon';
+        this.isRifter = function() {
+            return this['cannon_rift'];
+        };
+
+        this.fire = function(fleet, fireType) {
+            fireType = fireType == 'missile' ? 'missile' : 'cannon';
             var damages = new DamageCollection();
 
             if (!this.isDestroy()) {
-                var diceResult, cannonDamages = {'ion': 1, 'plasma': 2, 'antimatter': 4};
+                var diceResult, cannonDamages = {'ion': 1, 'plasma': 2, 'soliton': 3, 'antimatter': 4, 'rift': '?'};
                 for (var cannonType in cannonDamages) {
                     var cannonDamage = cannonDamages[cannonType];
                     var countDamage = 1;
+                    var backfire = 0;
 
-                    if (fireType == 'cannon' && cannonType == 'antimatter' && (army.antimatter_splitter || false)) {
+                    if (fireType == 'cannon' && cannonType == 'antimatter' && (fleet.antimatter_splitter || false)) {
                         countDamage = cannonDamage;
                         cannonDamage = 1;
                     }
 
                     for (var i = 0; i < this[fireType + '_' + cannonType]; ++i) {
                         diceResult = dice();
+                        if (cannonType === 'rift') {
+                            cannonDamage = Math.max(0, diceResult - 3);
+                            backfire = (diceResult === 3 || diceResult === 6) ? 1 : 0;
+                        }
                         for (var j = 0; j < countDamage; ++j) {
                             damages.add(new Damage({
                                 dice: diceResult,
                                 damage: cannonDamage,
+                                backfire: backfire,
                                 ship: this,
                                 type: cannonType
                             }));
@@ -544,12 +635,12 @@
             return damages;
         };
 
-        this.fireCannons = function(army) {
-            return this.fire(army, 'cannon');
+        this.fireCannons = function(fleet) {
+            return this.fire(fleet, 'cannon');
         };
 
-        this.fireRockets = function(army) {
-            return this.fire(army, 'rocket');
+        this.fireMissiles = function(fleet) {
+            return this.fire(fleet, 'missile');
         };
 
         this.init();
@@ -560,6 +651,14 @@
         this.type = Ship;
 
         this.add(ships || []);
+
+        this.eachAliveRifter = function(callback) {
+            for (var i = 0, ii = this.items.length; i < ii; ++i)
+                if (!this.items[i].isDestroy() && this.items[i].isRifter())
+                    callback(this.items[i]);
+            return this;
+        };
+
 
         this.eachAlive = function(callback) {
             for (var i = 0, ii = this.items.length; i < ii; ++i) {
@@ -577,18 +676,18 @@
             return this;
         };
 
-        this.fireCannons = function(army) {
+        this.fireCannons = function(fleet) {
             var damages = new DamageCollection();
             this.each(function(ship) {
-                damages.add(ship.fireCannons(army));
+                damages.add(ship.fireCannons(fleet));
             });
             return damages;
         };
 
-        this.fireRockets = function(army) {
+        this.fireMissiles = function(fleet) {
             var damages = new DamageCollection();
             this.each(function(ship) {
-                damages.add(ship.fireRockets(army));
+                damages.add(ship.fireMissiles(fleet));
             });
             return damages;
         };
@@ -665,7 +764,7 @@
     }
     Starbase.prototype = new Ship;
 
-    function Army(attrs) {
+    function Fleet(attrs) {
         var self = this;
 
         self.initAttrs = attrs;
@@ -693,19 +792,19 @@
             for (var i = 0, ii = attrs.interceptor.number || 0; i < ii; ++i) {
                 self.ships.push(new Interceptor(attrs.interceptor));
             }
-            for (var i = 0, ii = attrs.cruiser.number || 0; i < ii; ++i) {
+            for (i = 0, ii = attrs.cruiser.number || 0; i < ii; ++i) {
                 self.ships.push(new Cruiser(attrs.cruiser));
             }
-            for (var i = 0, ii = attrs.dreadnought.number || 0; i < ii; ++i) {
+            for (i = 0, ii = attrs.dreadnought.number || 0; i < ii; ++i) {
                 self.ships.push(new Dreadnought(attrs.dreadnought));
             }
-            for (var i = 0, ii = attrs.starbase.number || 0; i < ii; ++i) {
+            for (i = 0, ii = attrs.starbase.number || 0; i < ii; ++i) {
                 self.ships.push(new Starbase(attrs.starbase));
             }
 
             self.shipsByInitiative = new ArrayCollection();
             self.shipsByPotency = new ArrayCollection();
-            for (var i = 0, ii = self.ships.length; i < ii; ++i) {
+            for (i = 0, ii = self.ships.length; i < ii; ++i) {
                 var ship = self.ships[i];
 
                 if (!self.attack) {
@@ -781,7 +880,7 @@
                 // destroy ships
                 ships.eachAlive(function(ship) {
                     if (ship.isDestroy(damages.getSumDamage(ship))) {
-                        damages.getForShip(ship, true).each(function(damage) {
+                        damages.getDamagesThisShipCouldTake(ship, true).each(function(damage) {
                             ship.putDamage(damage);
                         });
                     }
@@ -791,7 +890,7 @@
             if (damages.getSumDamage()) {
                 // damage ships
                 ships.eachAlive(function(ship) {
-                    damages.getForShip(ship, true).each(function(damage) {
+                    damages.getDamagesThisShipCouldTake(ship, true).each(function(damage) {
                         ship.putDamage(damage);
                     });
                 });
@@ -800,13 +899,40 @@
             return this;
         };
 
-        self.putDamagesRockets = function(damages) {
+        self.putBackfires = function(damages) {
+            //
+            var ships = self.getShipsByPotency();
+
+            // first, destroy ships
+            var backfires = damages.getSumBackfires()
+            if (backfires) {
+                ships.eachAliveRifter(function(ship) {
+                    if (ship.isDestroy(backfires)) {
+                        var dmg = Math.min(ship.getHealth(), backfires);
+                        ship.putBackfires(dmg);
+                        backfires -= dmg;
+                    }
+                });
+            }
+
+            // then damage with remainder
+            if (backfires) {
+                ships.eachAliveRifter(function(ship) {
+                    var dmg = Math.min(ship.getHealth(), backfires);
+                    ship.putBackfires(dmg);
+                    backfires -= dmg;
+                });
+            }
+
+        };
+
+        self.putDamagesMissiles = function(damages) {
             // Point Defence
             if (self.point_defence) {
                 var sortedDamages = damages.all().sort(function(a, b) { return b.damage - a.damage; });
                 var defenceFire = self.getShips().fireCannons(self);
                 defenceFire.each(function(damage) {
-                    if (damage.getHit()) {
+                    if (damage.getDamageToShip()) {
                         sortedDamages.shift();
                     }
                 });
@@ -846,12 +972,15 @@
     function Damage(attrs) {
         this.dice = attrs.dice || NaN;
         this.damage = attrs.damage || 0;
+        this.backfire = attrs.backfire || 0;
         this.ship = attrs.ship || new Ship();
         this.type = attrs.type || NaN;
         this.modify = attrs.modify || 0;
 
-        this.getHit = function(ship) {
-            if (ship === undefined) {
+        this.getDamageToShip = function(ship) {
+            if (this.type === 'rift')
+                return this.damage;
+            else if (ship === undefined) {
                 if (this.dice > 1 && (this.dice + this.ship.computer + this.modify) >= 6) {
                     return this.damage;
                 }
@@ -871,10 +1000,10 @@
 
         this.add(damages || []);
 
-        this.getHitted = function(ship) {
+        this.getDamagesThatHitThisShip = function(ship) {
             var damages = new DamageCollection();
             this.each(function(damage) {
-                if (damage.getHit(ship) > 0) {
+                if (damage.getDamageToShip(ship) > 0) {
                     damages.add(damage);
                 }
             });
@@ -884,15 +1013,23 @@
         this.getSumDamage = function(ship) {
             var sum = 0;
             this.each(function(damage) {
-                sum += damage.getHit(ship);
+                sum += damage.getDamageToShip(ship);
             });
             return sum;
         };
 
-        this.getForShip = function(ship, remove) {
+        this.getSumBackfires = function() {
+            var sum = 0;
+            this.each(function(damage) {
+                sum += damage.backfire;
+            });
+            return sum;
+        };
+
+        this.getDamagesThisShipCouldTake = function(ship, remove) {
             remove = remove === undefined ? true : !!remove;
 
-            var collection = this.getHitted(ship);
+            var collection = this.getDamagesThatHitThisShip(ship);
 
             if (ship.isDestroy(collection.getSumDamage(ship))) {
                 var damagesByCount = new ArrayCollection(),
@@ -935,158 +1072,165 @@
 
             return new DamageCollection(collection);
         };
-
-        /** @deprecated */
-        this.getForShipSimple = function(ship, remove) {
-            remove = remove === undefined ? true : !!remove;
-            var damage,
-                hit,
-                health = ship.getHealth(),
-                all = this.all(),
-                sum = 0,
-                damages = [];
-
-            for (var i = 0, ii = all.length; i < ii; ++i) {
-                damage = all[i];
-                if (hit = damage.getHit(ship)) {
-                    damages.push(damage);
-                    sum += hit;
-                    if (sum >= health) {
-                        break;
-                    }
-                }
-            }
-
-            if (remove) {
-                this.remove(damages);
-            }
-
-            return new DamageCollection(damages);
-        };
     }
     DamageCollection.prototype = new Collection;
 
 
-    function calcBattles(firstArmyAttrs, secondArmyAttrs, count) {
-        var firstArmy = new Army(firstArmyAttrs),
-            secondArmy = new Army(secondArmyAttrs);
+    function calcBattles(firstFleetAttrs, secondFleetAttrs, count) {
+        var firstFleet = new Fleet(firstFleetAttrs),
+            secondFleet = new Fleet(secondFleetAttrs);
 
         var order = [],
             ships = [],
-            initiatives = firstArmy.getInitiatives().concat(secondArmy.getInitiatives());
+            initiatives = firstFleet.getInitiatives().concat(secondFleet.getInitiatives());
         initiatives.sort(function (a, b) { return b - a; });
         for (var i = 0, ii = initiatives.length; i < ii; ++i) {
-            if (firstArmy.attack) {
-                ships = secondArmy.getShipsByInitiative(initiatives[i]);
+            if (firstFleet.attack) {
+                ships = secondFleet.getShipsByInitiative(initiatives[i]);
                 if (ships.count()) {
-                    order.push({ships: ships, fireArmy: secondArmy, defenceArmy: firstArmy});
+                    order.push({ships: ships, fireFleet: secondFleet, defenceFleet: firstFleet});
                 }
 
-                ships = firstArmy.getShipsByInitiative(initiatives[i]);
+                ships = firstFleet.getShipsByInitiative(initiatives[i]);
                 if (ships.count()) {
-                    order.push({ships: ships, fireArmy: firstArmy, defenceArmy: secondArmy});
+                    order.push({ships: ships, fireFleet: firstFleet, defenceFleet: secondFleet});
                 }
             } else {
-                ships = firstArmy.getShipsByInitiative(initiatives[i]);
+                ships = firstFleet.getShipsByInitiative(initiatives[i]);
                 if (ships.count()) {
-                    order.push({ships: ships, fireArmy: firstArmy, defenceArmy: secondArmy});
+                    order.push({ships: ships, fireFleet: firstFleet, defenceFleet: secondFleet});
                 }
 
-                ships = secondArmy.getShipsByInitiative(initiatives[i]);
+                ships = secondFleet.getShipsByInitiative(initiatives[i]);
                 if (ships.count()) {
-                    order.push({ships: ships, fireArmy: secondArmy, defenceArmy: firstArmy});
+                    order.push({ships: ships, fireFleet: secondFleet, defenceFleet: firstFleet});
                 }
             }
         }
 
         var results = {
             winner: {0: 0, 1: 0, 2: 0, '-1': 0},
-            firstArmy: {interceptor: 0, cruiser: 0, dreadnought: 0, starbase: 0},
-            secondArmy: {interceptor: 0, cruiser: 0, dreadnought: 0, starbase: 0},
+            firstFleet: {interceptor: 0, cruiser: 0, dreadnought: 0, starbase: 0},
+            secondFleet: {interceptor: 0, cruiser: 0, dreadnought: 0, starbase: 0},
             number: 0
         };
 
         for (var i = 0, result; i < count; ++i) {
-            result = calcBattle(firstArmy, secondArmy, order);
+            result = calcBattle(firstFleet, secondFleet, order, i + 1 === count);
             ++results.number;
             ++results.winner[result];
 
-            if (!firstArmy.isDestroy()) {
-                firstArmy.getShips().eachAlive(function(ship) {
-                    ++results.firstArmy[ship.type];
+            if (!firstFleet.isDestroy()) {
+                firstFleet.getShips().eachAlive(function(ship) {
+                    ++results.firstFleet[ship.type];
                 });
             }
 
-            if (!secondArmy.isDestroy()) {
-                secondArmy.getShips().eachAlive(function(ship) {
-                    ++results.secondArmy[ship.type];
+            if (!secondFleet.isDestroy()) {
+                secondFleet.getShips().eachAlive(function(ship) {
+                    ++results.secondFleet[ship.type];
                 });
             }
         }
 
         if (results.number > 0) {
-            for (var i in results.firstArmy) {
-                results.firstArmy[i] = results.firstArmy[i] / count;
+            for (var i in results.firstFleet) {
+                results.firstFleet[i] = results.firstFleet[i] / count;
             }
-            for (var i in results.secondArmy) {
-                results.secondArmy[i] = results.secondArmy[i] / count;
+            for (var i in results.secondFleet) {
+                results.secondFleet[i] = results.secondFleet[i] / count;
             }
         }
 
         return results;
     }
 
-    function battleResult(firstArmy, secondArmy) {
-        if (firstArmy.isDestroy() && secondArmy.isDestroy()) {
+    function battleResult(firstFleet, secondFleet) {
+        if (firstFleet.isDestroy() && secondFleet.isDestroy()) {
             return 0;
         }
-        if (firstArmy.isDestroy()) {
+        if (firstFleet.isDestroy()) {
             return 2;
         }
-        if (secondArmy.isDestroy()) {
+        if (secondFleet.isDestroy()) {
             return 1;
         }
         return -1;
     }
 
-    function calcBattle(firstArmy, secondArmy, order) {
-        firstArmy.clearDamage();
-        secondArmy.clearDamage();
+    function logDice(damages) {
+        var dice = []
+        for (var d in damages.items)
+            dice.push( damages.items[d].dice);
+        console.log('roll: '+dice.join(' '));
+    }
+
+    function logFleet(fleet) {
+        var ships = 'ships: '
+        for (var i = 0; i < fleet.ships.length; i++) {
+            var ship = fleet.ships[i];
+            if (ship.type === 'interceptor')
+                ships += 'i';
+            else if (ship.type ===  'cruiser')
+                ships += 'c';
+            else if (ship.type === 'dreadnought')
+                ships += 'd';
+            else if (ship.type === 'starbase')
+                ships += 's';
+
+            for (var d = 0; d < ship.damage; d++)
+                ships += '*';
+            ships += ' ';
+        }
+        console.log(ships);
+    }
+
+    function calcBattle(firstFleet, secondFleet, order, log) {
+        firstFleet.clearDamage();
+        secondFleet.clearDamage();
 
         var result,
             action,
             damages;
 
-        // Rockets
+        // Missiles
         for (var i = 0, ii = order.length; i < ii; ++i) {
             action = order[i];
-            damages = action.ships.fireRockets(action.fireArmy);
-            action.defenceArmy.putDamagesRockets(damages);
+            damages = action.ships.fireMissiles(action.fireFleet);
+            action.defenceFleet.putDamagesMissiles(damages);
         }
 
-        if ((result = battleResult(firstArmy, secondArmy)) >= 0) {
+        if ((result = battleResult(firstFleet, secondFleet)) >= 0) {
             return result;
         }
 
         // Rounds
-        if (firstArmy.getShips().fireCannons(firstArmy).count() || secondArmy.getShips().fireCannons(secondArmy).count()) {
+        if (firstFleet.getShips().fireCannons(firstFleet).count() || secondFleet.getShips().fireCannons(secondFleet).count()) {
             for (var j = 0; j < 1000; ++j) {
                 for (var i = 0, ii = order.length; i < ii; ++i) {
                     action = order[i];
-                    damages = action.ships.fireCannons(action.fireArmy);
-                    action.defenceArmy.putDamages(damages);
+                    log && console.log('group '+i);
+                    damages = action.ships.fireCannons(action.fireFleet);
+                    log && logDice(damages);
 
-                    if ((result = battleResult(firstArmy, secondArmy)) >= 0) {
+                    action.fireFleet.putBackfires(damages);
+                    action.defenceFleet.putDamages(damages);
+                    log && logFleet(firstFleet); log && logFleet(secondFleet);
+
+                    if ((result = battleResult(firstFleet, secondFleet)) >= 0) {
+                        log && console.log('fleet '+result+' wins');
                         return result;
                     }
                 }
 
-                firstArmy.endFireRound();
-                secondArmy.endFireRound();
+                firstFleet.endFireRound();
+                secondFleet.endFireRound();
             }
         }
 
-        return battleResult(firstArmy, secondArmy);
+        result = battleResult(firstFleet, secondFleet);
+        log && console.log('fleet '+result+' wins');
+        return result;
     }
 
 

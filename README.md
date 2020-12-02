@@ -1,27 +1,29 @@
-Mini application for [boardgame Eclipse](http://boardgamegeek.com/boardgame/72125/eclipse)
+Mini application for the boardgame [Eclipse](https://boardgamegeek.com/boardgame/246900/eclipse-second-dawn-galaxy)
 
-[**Demo**](http://eclipse.mal.by)
+[**Demo**](https://www.endlessenergyblueprint.com/helper)
 
 # Cannons
 
-Calculation the probability of hits to the opponent.
-Select number of cannons or rockets and set bonus. Press "Calc" for get results.
+Calculate the probability of hits to the opponent.
+Select number of cannons or missiles and set bonus. Press "Calc" for get results.
 
 Types of counter:
 
-* Ion (yellow) - number of ion cannons or rockets
-* Plasma (orange) - number of plasma cannons or rockets
-* Antimatter (red) - number of antimatter cannons or rockets
+* Ion (yellow) - number of ion cannons or missiles
+* Plasma (orange) - number of plasma cannons or missiles
+* Soliton (blue) - number of soliton cannons
+* Antimatter (red) - number of antimatter cannons or missiles
+* Rift (violet) - number of rift cannons 
 * Bonus (white) - bonus of computers, considering opponent's shields
 
-# Dices
+# Dice
 
-Simulation throw of dices.
-Select number of dices of each color. Press "Throw" for get results.
+Simulate a throw of dice.
+Select number of dice of each color. Press "Throw" to get results.
 
 # Battle
 
-Calculation the probability of winning the battle.
+Calculate the probability of winning the battle.
 Also, you can simulate one battle and get results.
 
 Enter the parameters of each army using the characteristics of ships and their number. 
@@ -35,22 +37,16 @@ Ships characteristics:
 * Computer (white) - number of computers
 * Shield (black) - number of shields
 * Initiative - number of initiative
-* Cannons:
-    * Ion (yellow) - number of ion cannons
-    * Plasma (orange) - number of plasma cannons
-    * Antimatter (red) - number of antimatter cannons
-* Rockets (on a standard module is 2 rocket; need enter 2, not 1, for each module):
-    * Ion (yellow) - number of ion rockets
-    * Plasma (orange) - number of plasma rockets
-    * Antimatter (red) - number of antimatter rockets
+* Cannons - number of cannons
+* Missiles (standard module is 2 missile; enter 2, not 1, for each module)
 
-Select number of battles calculation.
-Algorithm will simulate a predetermined number of battles and display average statistics. 
+Select number of battles for the calculation.
+Algorithm will simulate that number of battles and display average statistics. 
 **Attention**, a lot of battles will lead to long-term calculation.
 
-After select all parameters, press "Run Battle" for get results.
+After selecting all parameters, press "Run Battle" to get results.
 
 # Races
 
-Select race for play by randomly.
+Select race to play randomly.
 Select the probability of selection of each race and press "Get random race" for get results.

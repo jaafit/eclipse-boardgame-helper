@@ -38,16 +38,20 @@
 		<!-- CANNONS -->
 		<div class="tab-pane" id="cannons">
 			<div class="row">
-				<div class="col-xs-3 game-counter-label">Ion</div>
-				<div class="col-xs-3 game-counter-label">Plasma</div>
-				<div class="col-xs-3 game-counter-label">Antimatter</div>
+				<div class="col-xs-2 game-counter-label">Ion</div>
+				<div class="col-xs-2 game-counter-label">Plasma</div>
+                <div class="col-xs-2 game-counter-label">Soliton</div>
+				<div class="col-xs-2 game-counter-label">Antimatter</div>
+                <div class="col-xs-2 game-counter-label">Rift</div>
 				<div class="col-xs-3 game-counter-label">Computers - Shields</div>
 			</div>
 			<div class="row">
-				<?= counter('cannons_ion', 3, 'game-ion') ?>
-				<?= counter('cannons_plasma', 3, 'game-plasma') ?>
-				<?= counter('cannons_antimatter', 3, 'game-antimatter') ?>
-				<?= counter('cannons_computer', 3, 'game-computer') ?>
+				<?= counter('cannons_ion', 2, 'game-ion') ?>
+				<?= counter('cannons_plasma', 2, 'game-plasma') ?>
+                <?= counter('cannons_soliton', 2, 'game-soliton') ?>
+				<?= counter('cannons_antimatter', 2, 'game-antimatter') ?>
+                <?= counter('cannons_rift', 2, 'game-rift') ?>
+				<?= counter('cannons_computer', 2, 'game-computer') ?>
 			</div>
 			<div class="row">
 				<button class="btn btn-lg btn-primary col-xs-12" id="cannons_calc">Calc</button>
@@ -59,9 +63,11 @@
 		<!-- DICES -->
 		<div class="tab-pane" id="dices">
 			<div class="row">
-				<?= counter('dices_ion', 4, 'game-ion') ?>
-				<?= counter('dices_plasma', 4, 'game-plasma') ?>
-				<?= counter('dices_antimatter', 4, 'game-antimatter') ?>
+				<?= counter('dices_ion', 2, 'game-ion') ?>
+				<?= counter('dices_plasma', 2, 'game-plasma') ?>
+                <?= counter('dices_soliton', 2, 'game-soliton') ?>
+				<?= counter('dices_antimatter', 2, 'game-antimatter') ?>
+                <?= counter('dices_rift', 2, 'game-rift') ?>
 			</div>
 			<div class="row">
 				<button class="btn btn-lg btn-primary col-xs-12" id="dices_throw">Throw</button>
@@ -72,7 +78,7 @@
 
 		<!-- BATTLE -->
 		<div class="tab-pane" id="battle">
-			<h2>First Army</h2>
+			<h2>First Fleet</h2>
 			<?= battleShip('battle_first_interceptor', 'Interceptors', array('initiative' => 3, 'cannon_ion' => 1)) ?>
 			<?= battleShip('battle_first_cruiser', 'Cruisers', array('initiative' => 2, 'hull' => 1, 'computer' => 1, 'cannon_ion' => 1)) ?>
 			<?= battleShip('battle_first_dreadnought', 'Dreadnoughts', array('initiative' => 1, 'hull' => 2, 'computer' => 1, 'cannon_ion' => 2)) ?>
@@ -80,7 +86,7 @@
 			<?= battleTechnologies('battle_first_technology') ?>
 			<?= battleSide('battle_first_side', true) ?>
 
-			<h2>Second Army</h2>
+			<h2>Second Fleet</h2>
 			<?= battleShip('battle_second_interceptor', 'Interceptors', array('initiative' => 3, 'cannon_ion' => 1)) ?>
 			<?= battleShip('battle_second_cruiser', 'Cruisers', array('initiative' => 2, 'hull' => 1, 'computer' => 1, 'cannon_ion' => 1)) ?>
 			<?= battleShip('battle_second_dreadnought', 'Dreadnoughts', array('initiative' => 1, 'hull' => 2, 'computer' => 1, 'cannon_ion' => 2)) ?>
@@ -189,7 +195,7 @@ function battleShip($idPrefix, $title = 'Ships', array $defaults = array())
 			<div class="panel-heading">' . $title . '<button class="btn clear-btn pull-right">Clear</button></div>
 			<div class="panel-body">
 				<div class="row">
-					' . counter($idPrefix . '_number', 2, '', (int)@$defaults['number'], false, 'Number') . '
+					' . counter($idPrefix . '_number', 2, 'game-number', (int)@$defaults['number'], false, 'Number') . '
 					' . counter($idPrefix . '_hull', 2, '', (int)@$defaults['hull'], false, 'Hull') . '
 					' . counter($idPrefix . '_morph', 2, '', (int)@$defaults['morph'], false, 'Morph') . '
 					' . counter($idPrefix . '_computer', 2, 'game-computer', (int)@$defaults['computer'], false, 'Computer') . '
@@ -198,16 +204,22 @@ function battleShip($idPrefix, $title = 'Ships', array $defaults = array())
 				</div>
 
 				<div class="row">
-					<div class="col-xs-6 game-counter-label">Cannons</div>
-					<div class="col-xs-6 game-counter-label">Rockets</div>
+					<div class="col-xs-6 game-counter-label">Cannons</div>					
 				</div>
 				<div class="row">
 					' . counter($idPrefix . '_cannon_ion', 2, 'game-ion', (int)@$defaults['cannon_ion'], false) . '
-					' . counter($idPrefix . '_cannon_plasma', 2, 'game-plasma', (int)@$defaults['cannon_plasma'], false) . '
+					' . counter($idPrefix . '_cannon_plasma', 2, 'game-plasma', (int)@$defaults['cannon_plasma'], false) . '					
+					' . counter($idPrefix . '_cannon_soliton', 2, 'game-soliton', (int)@$defaults['cannon_soliton'], false) . '
 					' . counter($idPrefix . '_cannon_antimatter', 2, 'game-antimatter', (int)@$defaults['cannon_antimatter'], false) . '
-					' . counter($idPrefix . '_rocket_ion', 2, 'game-ion', (int)@$defaults['rocket_ion'], false) . '
-					' . counter($idPrefix . '_rocket_plasma', 2, 'game-plasma', (int)@$defaults['rocket_plasma'], false) . '
-					' . counter($idPrefix . '_rocket_antimatter', 2, 'game-antimatter', (int)@$defaults['rocket_antimatter'], false) . '
+					' . counter($idPrefix . '_cannon_rift', 2, 'game-rift', (int)@$defaults['cannon_rift'], false) . '
+				</div>
+				<div class="row">
+				    <div class="col-xs-6 game-counter-label">Missiles</div>
+                </div>
+                <div class="row">
+					' . counter($idPrefix . '_missile_ion', 2, 'game-ion', (int)@$defaults['missile_ion'], false) . '
+					' . counter($idPrefix . '_missile_plasma', 2, 'game-plasma', (int)@$defaults['missile_plasma'], false) . '
+					' . counter($idPrefix . '_missile_antimatter', 2, 'game-antimatter', (int)@$defaults['missile_antimatter'], false) . '
 				</div>
 			</div>
 		</div>
