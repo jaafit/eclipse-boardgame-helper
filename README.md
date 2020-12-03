@@ -24,7 +24,8 @@ Select number of dice of each color. Press "Throw" to get results.
 # Battle
 
 Calculate the probability of winning the battle.
-Also, you can simulate one battle and get results.
+Also, you can simulate one battle and get results
+(see dev console for play-by-play).
 
 Enter the parameters of each army using the characteristics of ships and their number. 
 Also choose which technologies have each army and attacking or defending side.
@@ -50,3 +51,8 @@ After selecting all parameters, press "Run Battle" to get results.
 
 Select race to play randomly.
 Select the probability of selection of each race and press "Get random race" for get results.
+
+Code available at https://github.com/jaafit/eclipse-boardgame-helper
+
+Credit to Negromovich for coding this in 2014 for 1st Ed:
+https://github.com/Negromovich/eclipse-boardgame-helper
