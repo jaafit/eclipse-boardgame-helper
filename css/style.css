@@ -5359,6 +5359,9 @@ a.list-group-item-danger.active:focus {
 .panel-danger > .panel-footer + .panel-collapse > .panel-body {
   border-bottom-color: #ebccd1;
 }
+img.npc {
+  max-height: 50px;
+}
 .embed-responsive {
   position: relative;
   display: block;
@@ -6321,6 +6324,10 @@ body {
 .table-align-center th,
 .table-align-center td {
   text-align: center;
+}
+.game-counter {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 .game-counter .btn {
   padding-left: 1px;

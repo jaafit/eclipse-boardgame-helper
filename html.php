@@ -82,18 +82,26 @@
                 <button class="btn btn-lg btn-primary col-xs-12 battle_run">Run Battle</button>
             </div>
 			<h2>First Fleet</h2>
-			<?= battleShip('battle_first_interceptor', 'Interceptors') ?>
-			<?= battleShip('battle_first_cruiser', 'Cruisers') ?>
-			<?= battleShip('battle_first_dreadnought', 'Dreadnoughts') ?>
-			<?= battleShip('battle_first_starbase', 'Starbases') ?>
+			<?= battleShip('battle_first_interceptor', 'Interceptors', array('initiative' => 3)) ?>
+			<?= battleShip('battle_first_cruiser', 'Cruisers', array('initiative' => 2)) ?>
+			<?= battleShip('battle_first_dreadnought', 'Dreadnoughts', array('initiative' => 1)) ?>
+			<?= battleShip('battle_first_starbase', 'Starbases', array('initiative' => 4)) ?>
 			<?= battleTechnologies('battle_first_technology') ?>
 			<?= battleSide('battle_first_side', true) ?>
 
-			<h2>Second Fleet</h2>
-			<?= battleShip('battle_second_interceptor', 'Interceptors') ?>
-			<?= battleShip('battle_second_cruiser', 'Cruisers') ?>
-			<?= battleShip('battle_second_dreadnought', 'Dreadnoughts') ?>
-			<?= battleShip('battle_second_starbase', 'Starbases') ?>
+			<h2>Second Fleet
+                <?= npc('ancienta'); ?>
+                <?= npc('ancientb'); ?>
+                <?= npc('guardiana'); ?>
+                <?= npc('guardianb'); ?>
+                <?= npc('gdsa'); ?>
+                <?= npc('gdsb'); ?>
+
+            </h2>
+			<?= battleShip('battle_second_interceptor', 'Interceptors', array('initiative' => 3)) ?>
+			<?= battleShip('battle_second_cruiser', 'Cruisers', array('initiative' => 2)) ?>
+			<?= battleShip('battle_second_dreadnought', 'Dreadnoughts', array('initiative' => 1)) ?>
+			<?= battleShip('battle_second_starbase', 'Starbases', array('initiative' => 4)) ?>
 			<?= battleTechnologies('battle_second_technology') ?>
 			<?= battleSide('battle_first_side', false) ?>
 
@@ -195,7 +203,7 @@ function battleShip($idPrefix, $title = 'Ships', array $defaults = array())
 {
 	return '
 		<div class="panel panel-default clear-group battle-ship-group">
-			<div class="panel-heading">' . $title . '<button class="btn clear-btn pull-right">Reset</button></div>
+			<div class="panel-heading">' . $title . '<button class="btn clear-btn pull-right">Clear</button></div>
 			<div class="panel-body">
 				<div class="row">
 					' . counter($idPrefix . '_number', 2, 'game-number', (int)@$defaults['number'], false, 'Number') . '
@@ -206,14 +214,13 @@ function battleShip($idPrefix, $title = 'Ships', array $defaults = array())
 					' . counter($idPrefix . '_initiative', 2, '', (int)@$defaults['initiative'], false, 'Initiative') . '
 				</div>
 
-				<div class="row">
-				    <div class="col-xs-1 game-counter-label">Cannons:</div>
+				<div class="row">				    
 					' . counter($idPrefix . '_cannon_ion', 1, 'game-ion', (int)@$defaults['cannon_ion'], false) . '
 					' . counter($idPrefix . '_cannon_plasma', 1, 'game-plasma', (int)@$defaults['cannon_plasma'], false) . '					
 					' . counter($idPrefix . '_cannon_soliton', 1, 'game-soliton', (int)@$defaults['cannon_soliton'], false) . '
 					' . counter($idPrefix . '_cannon_antimatter', 1, 'game-antimatter', (int)@$defaults['cannon_antimatter'], false) . '
 					' . counter($idPrefix . '_cannon_rift', 1, 'game-rift', (int)@$defaults['cannon_rift'], false) . '
-					<div class="col-xs-1 game-counter-label">Missiles:</div>
+					<div class="col-xs-3 game-counter-label">Missiles:</div>
 					' . counter($idPrefix . '_missile_ion', 1, 'game-ion', (int)@$defaults['missile_ion'], false) . '
 					' . counter($idPrefix . '_missile_plasma', 1, 'game-plasma', (int)@$defaults['missile_plasma'], false) . '
 					' . counter($idPrefix . '_missile_antimatter', 1, 'game-antimatter', (int)@$defaults['missile_antimatter'], false) . '
@@ -229,6 +236,10 @@ function battleShip($idPrefix, $title = 'Ships', array $defaults = array())
     // guardian B: 2 plasma missles, 1 AM, 1 comp, 3 hull, 1 init
     // GDS A: 4 ions, 2 computers, 7 hull, 0 init
     // GDS B: 4 ion missiles, 1 AM, 2 comp, 3 hull
+}
+
+function npc($name) {
+    return "<img class=\"npc\" src=\"img/npcs/$name.png\"/>";
 }
 
 function battleTechnologies($idPrefix)
