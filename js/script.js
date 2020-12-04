@@ -10,8 +10,12 @@
         if ($target.hasClass('game-counter-plus')) {
             value++;
         } else if ($target.hasClass('game-counter-minus')) {
-            value = value > 1 ? value - 1 : 0;
+            value--;
         }
+        if ($(this).hasClass('negative'))
+            value = Math.min(0, value);
+        else
+            value = Math.max(0, value);
         $value.data('value', value);
         $value.html(list.length ? list[value] : value);
     });
@@ -32,12 +36,12 @@
     });
 
     $body.on('click', '.clear-btn', function() {
-        // renamed to "Reset"
+
         var countervals = $(this).closest('.clear-group').find('.game-counter-value');
         countervals.html(0);
         countervals.data('value', 0);
 
-        var a = $(this).closest('.panel-body').find('.game-number .active');
+        var a = $(this).closest('.clear-group').find('.game-number .game-counter-value');
         a.html(1);
         a.data('value', 1);
         return false; // don't also toggle visible
@@ -325,13 +329,13 @@
         html += '<table class="table">';
         html += '<thead><tr>';
 
-        html += '<th class="col-xs-' + width + '">First Victory</th>';
-        html += '<th class="col-xs-' + width + '">Second Victory</th>';
+        html += '<th class="col-xs-' + width + '">Your Victory %</th>';
+        html += '<th class="col-xs-' + width + '">Their Victory %</th>';
         if (results.winner[0]) {
-            html += '<th class="col-xs-' + width + '">Draw</th>';
+            html += '<th class="col-xs-' + width + '">Draw %</th>';
         }
         if (results.winner[-1]) {
-            html += '<th class="col-xs-' + width + '">Stalemate</th>';
+            html += '<th class="col-xs-' + width + '">Stalemate %</th>';
         }
 
         html += '</tr></thead>';
@@ -352,7 +356,7 @@
         // Survivors table
         html += '<h4>Survivors</h4>';
         html += '<table class="table">';
-        html += '<thead><tr><th></th><th>First Fleet</th><th>Second Fleet</th></tr></thead>';
+        html += '<thead><tr><th></th><th>Your Fleet</th><th>Their Fleet</th></tr></thead>';
         html += '<tbody>';
         for (var i in shipTypes) {
             html += '<tr>' +
@@ -991,21 +995,17 @@
         this.type = attrs.type || NaN;
         this.modify = attrs.modify || 0;
 
-        this.getDamageToShip = function(ship) {
-            if (this.type === 'rift')
+        this.getDamageToShip = function(targetShip) {
+            var shield = targetShip && targetShip.shield || 0;
+
+            if (this.dice === 6 || this.type === 'rift')
                 return this.damage;
-            else if (ship === undefined) {
-                if (this.dice > 1 && (this.dice + this.ship.computer + this.modify) >= 6) {
-                    return this.damage;
-                }
+            else if (this.dice > 1 && this.dice + this.ship.computer + this.modify + shield >= 6)
+                return this.damage;
+            else
                 return 0;
-            } else {
-                if (this.dice > 1 && (this.dice + this.ship.computer + this.modify - ship.shield) >= 6) {
-                    return this.damage;
-                }
-                return 0;
-            }
         }
+
     }
 
     function DamageCollection(damages) {

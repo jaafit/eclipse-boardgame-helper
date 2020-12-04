@@ -43,7 +43,7 @@
                 <div class="col-xs-2 game-counter-label">Soliton</div>
 				<div class="col-xs-2 game-counter-label">Antimatter</div>
                 <div class="col-xs-2 game-counter-label">Rift</div>
-				<div class="col-xs-2 game-counter-label">Computers - Shields</div>
+				<div class="col-xs-2 game-counter-label">Computers + Shields</div>
 			</div>
 			<div class="row">
 				<?= counter('cannons_ion', 2, 'game-ion') ?>
@@ -78,10 +78,8 @@
 
 		<!-- BATTLE -->
 		<div class="tab-pane" id="battle">
-            <div class="row">
-                <button class="btn btn-lg btn-primary col-xs-12 battle_run">Run Battle</button>
-            </div>
-			<h2>First Fleet</h2>
+
+			<h2>Your Fleet</h2>
 			<?= battleShip('battle_first_interceptor', 'Interceptors', array('initiative' => 3)) ?>
 			<?= battleShip('battle_first_cruiser', 'Cruisers', array('initiative' => 2)) ?>
 			<?= battleShip('battle_first_dreadnought', 'Dreadnoughts', array('initiative' => 1)) ?>
@@ -89,42 +87,38 @@
 			<?= battleTechnologies('battle_first_technology') ?>
 			<?= battleSide('battle_first_side', true) ?>
 
-			<h2>Second Fleet
-                <?= npc('ancienta'); ?>
-                <?= npc('ancientb'); ?>
-                <?= npc('guardiana'); ?>
-                <?= npc('guardianb'); ?>
-                <?= npc('gdsa'); ?>
-                <?= npc('gdsb'); ?>
+            <div class="row">
+                <button class="btn btn-lg btn-primary col-xs-12 battle_run">Run Battle</button>
+            </div>
 
-            </h2>
+			<h2>Their Fleet</h2>
 			<?= battleShip('battle_second_interceptor', 'Interceptors', array('initiative' => 3)) ?>
 			<?= battleShip('battle_second_cruiser', 'Cruisers', array('initiative' => 2)) ?>
 			<?= battleShip('battle_second_dreadnought', 'Dreadnoughts', array('initiative' => 1)) ?>
 			<?= battleShip('battle_second_starbase', 'Starbases', array('initiative' => 4)) ?>
+            <?= npcShip(); ?>
 			<?= battleTechnologies('battle_second_technology') ?>
 			<?= battleSide('battle_first_side', false) ?>
 
-			<h2>Run calculation</h2>
-
-			<div class="panel panel-default battle-side">
-				<div class="panel-heading">Number of battles</div>
-				<div class="panel-body panel-visible">
-					<div class="btn-group col-xs-12 game-counter" data-list="1,10,25,50,100,250,500,1000,2500,5000,10000,25000,50000,100000">
-						<button class="btn btn-primary game-counter-minus col-xs-4">-</button>
-						<button class="btn btn-primary game-counter-value col-xs-4 active" id="battle_number" data-value="7">1000</button>
-						<button class="btn btn-primary game-counter-plus col-xs-4">+</button>
-					</div>
-				</div>
-			</div>
 
 			<div class="row">
 				<button class="btn btn-lg btn-primary col-xs-12 battle_run">Run Battle</button>
 			</div>
 
-			<a name="results" id="battle_result_anchor"></a>
+            <div class="panel panel-default battle-side">
+                <div class="panel-heading">Number of battles</div>
+                <div class="panel-body panel-visible">
+                    <div class="btn-group col-xs-12 game-counter" data-list="1,10,25,50,100,250,500,1000,2500,5000,10000,25000,50000,100000">
+                        <button class="btn btn-primary game-counter-minus col-xs-4">-</button>
+                        <button class="btn btn-primary game-counter-value col-xs-4 active" id="battle_number" data-value="9">5000</button>
+                        <button class="btn btn-primary game-counter-plus col-xs-4">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <a name="results" id="battle_result_anchor"></a>
 			<h2>Results</h2>
-			<div class="row battle-result" id="battle_result"><i>Click "Run Battle" for get results</i></div>
+			<div class="row battle-result" id="battle_result"><i>Click "Run Battle" to get results</i></div>
 		</div>
 		<!-- /BATTLE -->
 
@@ -137,10 +131,6 @@
 				<?= counterRace('race_4', 'img/DescendantsOfDraco.png') ?>
 				<?= counterRace('race_5', 'img/Mechanema.png') ?>
 				<?= counterRace('race_6', 'img/OrionHegemony.png') ?>
-				<?= counterRace('race_7', 'img/Exiles.png') ?>
-				<?= counterRace('race_8', 'img/RhoIndiSyndicate.png') ?>
-				<?= counterRace('race_9', 'img/EnlightenedOfLyra.png') ?>
-				<?= counterRace('race_10', 'img/WardensOfMagellan.png') ?>
 				<?= counterRace('race_11', 'img/TerranFederation.png') ?>
 			</div>
 			<div class="row">
@@ -206,11 +196,11 @@ function battleShip($idPrefix, $title = 'Ships', array $defaults = array())
 			<div class="panel-heading">' . $title . '<button class="btn clear-btn pull-right">Clear</button></div>
 			<div class="panel-body">
 				<div class="row">
-					' . counter($idPrefix . '_number', 2, 'game-number', (int)@$defaults['number'], false, 'Number') . '
+					' . counter($idPrefix . '_number', 2, 'game-number', (int)@$defaults['number'], false, 'Ships') . '
 					' . counter($idPrefix . '_hull', 2, '', (int)@$defaults['hull'], false, 'Hull') . '
 					' . counter($idPrefix . '_morph', 2, '', (int)@$defaults['morph'], false, 'Regen') . '
 					' . counter($idPrefix . '_computer', 2, 'game-computer', (int)@$defaults['computer'], false, 'Computer') . '
-					' . counter($idPrefix . '_shield', 2, 'game-shield', (int)@$defaults['shield'], false, 'Shield') . '
+					' . counter($idPrefix . '_shield', 2, 'game-shield negative', (int)@$defaults['shield'], false, 'Shield') . '
 					' . counter($idPrefix . '_initiative', 2, '', (int)@$defaults['initiative'], false, 'Initiative') . '
 				</div>
 
@@ -238,8 +228,17 @@ function battleShip($idPrefix, $title = 'Ships', array $defaults = array())
     // GDS B: 4 ion missiles, 1 AM, 2 comp, 3 hull
 }
 
-function npc($name) {
-    return "<img class=\"npc\" src=\"img/npcs/$name.png\"/>";
+function npcImg($name) {
+    return "<img class=\"npc $name\" src=\"img/npcs/$name.png\"/>";
+}
+
+function npcShip() {
+    return npcImg('ancienta')
+        .npcImg('guardiana')
+        .npcImg('ancientb')
+        .npcImg('guardianb')
+        .npcImg('gdsa')
+        .npcImg('gdsb');
 }
 
 function battleTechnologies($idPrefix)

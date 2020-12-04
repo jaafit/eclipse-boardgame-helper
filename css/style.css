@@ -889,7 +889,7 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.42857143;
-  color: #333333;
+  color: white;
   background-color: black;
 }
 input,
@@ -6328,6 +6328,7 @@ body {
 .game-counter {
   padding-left: 5px;
   padding-right: 5px;
+  color: #333333;
 }
 .game-counter .btn {
   padding-left: 1px;
