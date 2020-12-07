@@ -2739,6 +2739,7 @@ select[multiple].form-group-lg .form-control {
   text-align: center;
   vertical-align: middle;
   touch-action: manipulation;
+  color: #333333;
   cursor: pointer;
   background-image: none;
   border: 1px solid transparent;
@@ -2876,7 +2877,7 @@ fieldset[disabled] .btn-primary.active {
   background-color: #ffffff;
 }
 .btn-success {
-  color: #ffffff;
+  color: #333333;
   background-color: #5cb85c;
   border-color: #4cae4c;
 }
@@ -3011,7 +3012,7 @@ fieldset[disabled] .btn-warning.active {
   background-color: #ffffff;
 }
 .btn-danger {
-  color: #ffffff;
+  color: #333333;
   background-color: #d9534f;
   border-color: #d43f3a;
 }
@@ -5032,6 +5033,9 @@ a.list-group-item-danger.active:focus {
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
+.panel.npc {
+  visibility: hidden;
+}
 .panel-body {
   padding: 15px;
 }
@@ -5360,6 +5364,7 @@ a.list-group-item-danger.active:focus {
   border-bottom-color: #ebccd1;
 }
 img.npc {
+  float:left;
   max-height: 50px;
 }
 .embed-responsive {
@@ -6303,6 +6308,9 @@ body {
 .panel-heading .default-ancient-button {
   margin-top: -8px;
   background: #ffffff;
+}
+.clear-fleet-btn {
+  color: #333333;
 }
 .panel-heading .default-ancient-button {
   margin-right: 15px;

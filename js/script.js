@@ -1,4 +1,19 @@
 (function($){
+
+    var togglePanel = function(panel) {
+        var a = panel.siblings('.panel-body').find('.game-number .active');
+        if (!panel.siblings('.panel-body').is(':visible')) {
+            panel.siblings('.panel-body').slideDown();
+            a.html(1); // change ship count to 1 upon showing
+            a.data('value', '1');
+        }
+        else {
+            panel.siblings('.panel-body').slideUp();
+            a.html(''); // change ship count to 0 upon hiding
+            a.data('value', '0');
+        }
+    };
+
     // Event Handlers
     var $body = $('body');
 
@@ -17,34 +32,37 @@
         else
             value = Math.max(0, value);
         $value.data('value', value);
-        $value.html(list.length ? list[value] : value);
+        $value.html(list.length ? list[value] : (value || ''));
     });
 
     $body.on('click', '.panel .panel-heading', function() {
-        var a = $(this).siblings('.panel-body').find('.game-number .active');
-        if (!$(this).siblings('.panel-body').is(':visible')) {
-            $(this).siblings('.panel-body').slideDown();
-            a.html(1); // change ship count to 1 upon showing
-            a.data('value', '1');
-        }
-        else {
-            $(this).siblings('.panel-body').slideUp();
-            a.html(0); // change ship count to 0 upon hiding
-            a.data('value', '0');
-        }
-
+        togglePanel($(this));
     });
 
-    $body.on('click', '.clear-btn', function() {
-
-        var countervals = $(this).closest('.clear-group').find('.game-counter-value');
-        countervals.html(0);
+    var clearShip = function(clearGroup) {
+        var countervals = clearGroup.find('.game-counter-value');
+        countervals.html('');
         countervals.data('value', 0);
 
-        var a = $(this).closest('.clear-group').find('.game-number .game-counter-value');
+        var a = clearGroup.find('.game-number .game-counter-value');
         a.html(1);
         a.data('value', 1);
+    }
+
+    $body.on('click', '.clear-btn', function() {
+        clearShip($(this).closest('.clear-group'));
         return false; // don't also toggle visible
+    });
+
+
+    $body.on('click', '.clear-fleet-btn', function() {
+        clearShip($(this).closest('.fleet').find('.clear-group'));
+    });
+
+    $body.on('click', '#npcbuttons .npc', function() {
+        var panel = $(this).closest('.panel.npc');
+        togglePanel(panel);
+        $('#npcbuttons').hide();
     });
 
     $body.on('click', '.button-checkbox', function() {
@@ -1200,7 +1218,7 @@
     }
 
     function groupString(action) {
-        if (!action.ships.getAlive())
+        if (!action.ships.getAlive().count())
             return '';
 
         var s = action.ships.getAlive().count() + ' ';
@@ -1234,6 +1252,8 @@
             for (var j = 0; j < 1000; ++j) {
                 for (var i = 0, ii = order.length; i < ii; ++i) {
                     action = order[i];
+                    if (!action.fireFleet.getShips().getAlive().count())
+                        continue;
 
                     damages = action.ships.fireCannons(action.fireFleet);
                     log && console.log(groupString(action) + ' roll: ' + diceString(damages));

@@ -1,4 +1,4 @@
-<?php ob_start(); ?>
+<?php //ob_start(); ?>
 
 <!DOCTYPE html>
 <html class="no-js">
@@ -79,26 +79,31 @@
 		<!-- BATTLE -->
 		<div class="tab-pane" id="battle">
 
-			<h2>Your Fleet</h2>
-			<?= battleShip('battle_first_interceptor', 'Interceptors', array('initiative' => 3)) ?>
-			<?= battleShip('battle_first_cruiser', 'Cruisers', array('initiative' => 2)) ?>
-			<?= battleShip('battle_first_dreadnought', 'Dreadnoughts', array('initiative' => 1)) ?>
-			<?= battleShip('battle_first_starbase', 'Starbases', array('initiative' => 4)) ?>
-			<?= battleTechnologies('battle_first_technology') ?>
-			<?= battleSide('battle_first_side', true) ?>
+            <div class="fleet">
+                <h2>Your Fleet<button class="btn clear-fleet-btn pull-right">Clear</button></h2>
+                <?= battleShip('battle_first_interceptor', 'Interceptors', array('initiative' => 3)) ?>
+                <?= battleShip('battle_first_cruiser', 'Cruisers', array('initiative' => 2)) ?>
+                <?= battleShip('battle_first_dreadnought', 'Dreadnoughts', array('initiative' => 1)) ?>
+                <?= battleShip('battle_first_starbase', 'Starbases', array('initiative' => 4)) ?>
+                <?= battleTechnologies('battle_first_technology') ?>
+                <?= battleSide('battle_first_side', true) ?>
+            </div>
 
             <div class="row">
                 <button class="btn btn-lg btn-primary col-xs-12 battle_run">Run Battle</button>
             </div>
 
-			<h2>Their Fleet</h2>
-			<?= battleShip('battle_second_interceptor', 'Interceptors', array('initiative' => 3)) ?>
-			<?= battleShip('battle_second_cruiser', 'Cruisers', array('initiative' => 2)) ?>
-			<?= battleShip('battle_second_dreadnought', 'Dreadnoughts', array('initiative' => 1)) ?>
-			<?= battleShip('battle_second_starbase', 'Starbases', array('initiative' => 4)) ?>
-            <?= npcShip(); ?>
-			<?= battleTechnologies('battle_second_technology') ?>
-			<?= battleSide('battle_first_side', false) ?>
+
+            <div class="fleet">
+                <h2>Their Fleet</h2>
+                <?= battleShip('battle_second_interceptor', 'Interceptors', array('initiative' => 3)) ?>
+                <?= battleShip('battle_second_cruiser', 'Cruisers', array('initiative' => 2)) ?>
+                <?= battleShip('battle_second_dreadnought', 'Dreadnoughts', array('initiative' => 1)) ?>
+                <?= battleShip('battle_second_starbase', 'Starbases', array('initiative' => 4)) ?>
+                <?= npcShip(); ?>
+                <?= battleTechnologies('battle_second_technology') ?>
+                <?= battleSide('battle_first_side', false) ?>
+            </div>
 
 
 			<div class="row">
@@ -154,6 +159,7 @@
 
 function counter($id, $size = 3, $class = '', $default = 0, $large = true, $label = null, $blockClass = '')
 {
+    $printedDefault = $default ? $default : '';
 	if ($large) { $class .= ' btn-group-lg'; }
 	if ($label) {
 		return sprintf('
@@ -161,19 +167,19 @@ function counter($id, $size = 3, $class = '', $default = 0, $large = true, $labe
 			<div class="game-counter-label">%s</div>
 			<div class="btn-group-vertical game-counter %s">
 				<button class="btn game-counter-plus">+</button>
-				<button class="btn game-counter-value active" id="%s" data-value="%d">%d</button>
+				<button class="btn game-counter-value active" id="%s" data-value="%d">%s</button>
 				<button class="btn game-counter-minus">-</button>
 			</div>
 		</div>
-		', $size, $blockClass, $label, $class, $id, $default, $default);
+		', $size, $blockClass, $label, $class, $id, $default, $printedDefault);
 	} else {
 		return sprintf('
 		<div class="btn-group-vertical col-xs-%d game-counter %s">
 			<button class="btn game-counter-plus">+</button>
-			<button class="btn game-counter-value active" id="%s" data-value="%d">%d</button>
+			<button class="btn game-counter-value active" id="%s" data-value="%d">%s</button>
 			<button class="btn game-counter-minus">-</button>
 		</div>
-		', $size, $class, $id, $default, $default);
+		', $size, $class, $id, $default, $printedDefault);
 	}
 }
 
@@ -189,10 +195,10 @@ function counterRace($id, $imgSrc = '') {
 		', $imgSrc, $id);
 }
 
-function battleShip($idPrefix, $title = 'Ships', array $defaults = array())
+function battleShip($idPrefix, $title = 'Ships', array $defaults = array(), $panelClass = '')
 {
 	return '
-		<div class="panel panel-default clear-group battle-ship-group">
+		<div class="panel '.$panelClass.' panel-default clear-group battle-ship-group">
 			<div class="panel-heading">' . $title . '<button class="btn clear-btn pull-right">Clear</button></div>
 			<div class="panel-body">
 				<div class="row">
@@ -229,16 +235,19 @@ function battleShip($idPrefix, $title = 'Ships', array $defaults = array())
 }
 
 function npcImg($name) {
-    return "<img class=\"npc $name\" src=\"img/npcs/$name.png\"/>";
+    return "<img id=\"npc_'.$name.' class=\"npc $name\" src=\"img/npcs/$name.png\"/>";
 }
 
 function npcShip() {
-    return npcImg('ancienta')
-        .npcImg('guardiana')
-        .npcImg('ancientb')
-        .npcImg('guardianb')
-        .npcImg('gdsa')
-        .npcImg('gdsb');
+    return '<div id="npcbuttons">'
+            .npcImg('ancientA')
+            .npcImg('ancientB')
+            .npcImg('guardianA')
+            .npcImg('guardianB')
+            .npcImg('gdsA')
+            .npcImg('gdsB')
+        .'</div>'
+        .battleShip('battle_second_npc', 'Non-player character', array(), 'npc');
 }
 
 function battleTechnologies($idPrefix)
@@ -287,8 +296,8 @@ function battleSideButton($idPrefix, $typeAttack, $attack)
 	}
 }
 
-file_put_contents('index.html', trim(ob_get_contents()));
-ob_end_clean();
-header ('Location: index.html');
+//file_put_contents('index.html', trim(ob_get_contents()));
+//return ob_end_clean();
+//header ('Location: index.html');
 
 ?>
