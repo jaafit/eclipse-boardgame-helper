@@ -100,7 +100,7 @@
                 <?= battleShip('battle_second_cruiser', 'Cruisers', array('initiative' => 2)) ?>
                 <?= battleShip('battle_second_dreadnought', 'Dreadnoughts', array('initiative' => 1)) ?>
                 <?= battleShip('battle_second_starbase', 'Starbases', array('initiative' => 4)) ?>
-                <?= npcShip(); ?>
+
                 <?= battleTechnologies('battle_second_technology') ?>
                 <?= battleSide('battle_first_side', false) ?>
             </div>
