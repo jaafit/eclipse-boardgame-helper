@@ -95,7 +95,7 @@
 
 
             <div class="fleet">
-                <h2>Their Fleet</h2>
+                <h2>Their Fleet<button class="btn clear-fleet-btn pull-right">Clear</button></h2>
                 <?= battleShip('battle_second_interceptor', 'Interceptors', array('initiative' => 3)) ?>
                 <?= battleShip('battle_second_cruiser', 'Cruisers', array('initiative' => 2)) ?>
                 <?= battleShip('battle_second_dreadnought', 'Dreadnoughts', array('initiative' => 1)) ?>

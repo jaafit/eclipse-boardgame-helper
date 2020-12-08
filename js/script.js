@@ -43,20 +43,22 @@
         var countervals = clearGroup.find('.game-counter-value');
         countervals.html('');
         countervals.data('value', 0);
+    };
 
+    $body.on('click', '.clear-btn', function() {
+        var clearGroup = $(this).closest('.clear-group');
+        clearShip(clearGroup);
         var a = clearGroup.find('.game-number .game-counter-value');
         a.html(1);
         a.data('value', 1);
-    }
-
-    $body.on('click', '.clear-btn', function() {
-        clearShip($(this).closest('.clear-group'));
         return false; // don't also toggle visible
     });
 
 
     $body.on('click', '.clear-fleet-btn', function() {
-        clearShip($(this).closest('.fleet').find('.clear-group'));
+        var clearGroup = $(this).closest('.fleet').find('.clear-group');
+        clearShip(clearGroup);
+        clearGroup.find('.panel-body').slideUp();
     });
 
     $body.on('click', '#npcbuttons .npc', function() {
@@ -289,6 +291,7 @@
         $battleResult = $('#battle_result'),
         $battleResultAnchor = $('#battle_result_anchor'),
         resultsNumber = 0,
+        startTime,
         battleCalcProcess = false;
 
     $battleRun.on('click', function(){
@@ -298,6 +301,7 @@
         //battleCalcProcess = true;
         $battleRun.removeClass('btn-primary');
         $battleResult.html('<div style="height: ' + $battleResult.height() + 'px"><i>processing</i></div>');
+        startTime = new Date().getTime();
 
         setTimeout(battleRun, 1);
     });
@@ -318,7 +322,7 @@
 
                 fleet['technologies'] = {};
                 for (var j in technologies) {
-                    fleet['technologies'][technologies[j]] = parseInt($('#' + idPrefix + '_' + technologies[j]).data('value')) ? true : false;
+                    fleet['technologies'][technologies[j]] = parseInt($('#' + idPrefix + '_technology_' + technologies[j]).data('value')) ? true : false;
                 }
 
                 fleet['side'] = {attack: false, defence: false};
@@ -387,6 +391,7 @@
         }
         html += '</tbody>';
         html += '</table>';
+        html += 'elapsed time ' + (new Date().getTime() - startTime)/1000 + ' s';
 
         $battleResult.html(html);
         $battleRun.addClass('btn-primary');
@@ -642,7 +647,7 @@
                     var countDamage = 1;
                     var backfire = 0;
 
-                    if (fireType == 'cannon' && cannonType == 'antimatter' && (fleet.antimatter_splitter || false)) {
+                    if (fireType === 'cannon' && cannonType === 'antimatter' && (fleet.antimatter_splitter)) {
                         countDamage = cannonDamage;
                         cannonDamage = 1;
                     }
