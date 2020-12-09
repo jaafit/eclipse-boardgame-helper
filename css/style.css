@@ -5367,6 +5367,10 @@ img.npc {
   float:left;
   max-height: 50px;
 }
+img.missile_icon {
+  max-height: 50px;
+  float:right;
+}
 .embed-responsive {
   position: relative;
   display: block;

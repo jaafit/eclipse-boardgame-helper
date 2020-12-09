@@ -216,9 +216,10 @@ function battleShip($idPrefix, $title = 'Ships', array $defaults = array(), $pan
 					' . counter($idPrefix . '_cannon_soliton', 1, 'game-soliton', (int)@$defaults['cannon_soliton'], false) . '
 					' . counter($idPrefix . '_cannon_antimatter', 1, 'game-antimatter', (int)@$defaults['cannon_antimatter'], false) . '
 					' . counter($idPrefix . '_cannon_rift', 1, 'game-rift', (int)@$defaults['cannon_rift'], false) . '
-					<div class="col-xs-3 game-counter-label">Missiles:</div>
+					<div class="col-xs-2"><img class="missile_icon" src="img/missile.png"/></div>
 					' . counter($idPrefix . '_missile_ion', 1, 'game-ion', (int)@$defaults['missile_ion'], false) . '
 					' . counter($idPrefix . '_missile_plasma', 1, 'game-plasma', (int)@$defaults['missile_plasma'], false) . '
+					' . counter($idPrefix . '_missile_soliton', 1, 'game-soliton', (int)@$defaults['missile_soliton'], false) . '
 					' . counter($idPrefix . '_missile_antimatter', 1, 'game-antimatter', (int)@$defaults['missile_antimatter'], false) . '
 				</div>
 			</div>

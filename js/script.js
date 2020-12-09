@@ -309,7 +309,7 @@
     function battleRun() {
         var technologies = ['antimatter_splitter','distortion_shield','point_defence'],
             fields = ['number','hull','regen','computer','shield','initiative',
-                'cannon_ion','cannon_plasma','cannon_soliton','cannon_antimatter','cannon_rift','missile_ion','missile_plasma','missile_antimatter'];
+                'cannon_ion','cannon_plasma','cannon_soliton','cannon_antimatter','cannon_rift','missile_ion','missile_plasma','missile_soliton','missile_antimatter'];
 
         var parseFleet = function(idPrefix) {
             var fleet = {};
@@ -585,7 +585,7 @@
 
     function Ship() {
         this.params = ['hull','regen','computer','shield','initiative',
-            'cannon_ion','cannon_plasma','cannon_soliton','cannon_antimatter','cannon_rift','missile_ion','missile_plasma','missile_antimatter'];
+            'cannon_ion','cannon_plasma','cannon_soliton','cannon_antimatter','cannon_rift','missile_ion','missile_plasma','missile_soliton','missile_antimatter'];
 
         this.default = {};
         this.type = 'ship';
@@ -1227,8 +1227,10 @@
 
     function diceString(damages) {
         var dice = [];
-        for (var d in damages.items)
-            dice.push( damages.items[d].dice);
+        for (var d in damages.items) {
+            var prefix = damages.items[d].type[0];
+            dice.push( prefix + damages.items[d].dice );
+        }
         return dice.join(' ');
     }
 
@@ -1252,6 +1254,13 @@
         console.log(ships);
     }
 
+    function logFleets(first, second, damages) {
+        if (damages.count()) {
+            logFleet(first);
+            logFleet(second);
+        }
+    }
+
     function groupString(action) {
         if (!action.ships.getAlive().count())
             return '';
@@ -1262,6 +1271,11 @@
         return s
     }
 
+    function logDice(action, damages, morc) {
+        if (damages.count())
+            console.log(groupString(action) + ' roll '+morc+': ' + diceString(damages));
+    }
+
     function calcBattle(firstFleet, secondFleet, order, log) {
         firstFleet.clearDamage();
         secondFleet.clearDamage();
@@ -1270,18 +1284,24 @@
             action,
             damages;
 
+        log && console.log('------------------- battle start ------------------')
+
         // Missiles
         for (var i = 0, ii = order.length; i < ii; ++i) {
             action = order[i];
             damages = action.ships.fireMissiles(action.fireFleet);
+            log && logDice(action, damages, 'missiles');
+
             action.catchFleet.putDamagesMissiles(damages);
+            log && logFleets(firstFleet, secondFleet, damages);
         }
 
         if ((result = battleResult(firstFleet, secondFleet)) >= 0) {
+            log && console.log('fleet '+result+' wins');
             return result;
         }
 
-        log && console.log('------------------- battle start ------------------')
+
         // Rounds
         if (firstFleet.getShips().fireCannons(firstFleet).count() || secondFleet.getShips().fireCannons(secondFleet).count()) {
             for (var j = 0; j < 1000; ++j) {
@@ -1291,11 +1311,11 @@
                         continue;
 
                     damages = action.ships.fireCannons(action.fireFleet);
-                    log && console.log(groupString(action) + ' roll: ' + diceString(damages));
+                    log && logDice(action, damages, 'cannons');
 
                     action.fireFleet.putBackfires(damages);
                     action.catchFleet.putDamages(damages);
-                    log && logFleet(firstFleet); log && logFleet(secondFleet);
+                    log && logFleets(firstFleet, secondFleet, damages);
 
                     if ((result = battleResult(firstFleet, secondFleet)) >= 0) {
                         log && console.log('fleet '+result+' wins');
