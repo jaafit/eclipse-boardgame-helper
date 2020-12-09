@@ -202,6 +202,7 @@ function battleShip($idPrefix, $title = 'Ships', array $defaults = array(), $pan
 			<div class="panel-heading">' . $title . '<button class="btn clear-btn pull-right">Clear</button></div>
 			<div class="panel-body">
 				<div class="row">
+				    
 					' . counter($idPrefix . '_number', 2, 'game-number', (int)@$defaults['number'], false, 'Ships') . '
 					' . counter($idPrefix . '_hull', 2, '', (int)@$defaults['hull'], false, 'Hull') . '
 					' . counter($idPrefix . '_morph', 2, '', (int)@$defaults['morph'], false, 'Regen') . '
@@ -210,13 +211,14 @@ function battleShip($idPrefix, $title = 'Ships', array $defaults = array(), $pan
 					' . counter($idPrefix . '_initiative', 2, '', (int)@$defaults['initiative'], false, 'Initiative') . '
 				</div>
 
-				<div class="row">				    
+				<div class="row">				
+				    <div class="col-xs-1"><img class="missile_icon" src="img/cannon.png"/></div>
 					' . counter($idPrefix . '_cannon_ion', 1, 'game-ion', (int)@$defaults['cannon_ion'], false) . '
 					' . counter($idPrefix . '_cannon_plasma', 1, 'game-plasma', (int)@$defaults['cannon_plasma'], false) . '					
 					' . counter($idPrefix . '_cannon_soliton', 1, 'game-soliton', (int)@$defaults['cannon_soliton'], false) . '
 					' . counter($idPrefix . '_cannon_antimatter', 1, 'game-antimatter', (int)@$defaults['cannon_antimatter'], false) . '
 					' . counter($idPrefix . '_cannon_rift', 1, 'game-rift', (int)@$defaults['cannon_rift'], false) . '
-					<div class="col-xs-2"><img class="missile_icon" src="img/missile.png"/></div>
+					<div class="col-xs-1"><img class="missile_icon" src="img/missile.png"/></div>
 					' . counter($idPrefix . '_missile_ion', 1, 'game-ion', (int)@$defaults['missile_ion'], false) . '
 					' . counter($idPrefix . '_missile_plasma', 1, 'game-plasma', (int)@$defaults['missile_plasma'], false) . '
 					' . counter($idPrefix . '_missile_soliton', 1, 'game-soliton', (int)@$defaults['missile_soliton'], false) . '
