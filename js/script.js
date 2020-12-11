@@ -1,16 +1,16 @@
 (function($){
 
     var togglePanel = function(panel) {
-        var a = panel.siblings('.panel-body').find('.game-number .active');
-        if (!panel.siblings('.panel-body').is(':visible')) {
-            panel.siblings('.panel-body').slideDown();
-            a.html(1); // change ship count to 1 upon showing
-            a.data('value', '1');
+        var body =  panel.find('.panel-body');
+        var a = body.find('.game-number .active');
+        if (!body.is(':visible')) {
+            body.slideDown();
+            a.data('value', '1').html(1); // change ship count to 1 upon showing
+
         }
         else {
-            panel.siblings('.panel-body').slideUp();
-            a.html(''); // change ship count to 0 upon hiding
-            a.data('value', '0');
+            body.slideUp();
+            a.data('value', '0').html(''); // change ship count to 0 upon hiding
         }
     };
 
@@ -36,7 +36,7 @@
     });
 
     $body.on('click', '.panel .panel-heading', function() {
-        togglePanel($(this));
+        togglePanel($(this).closest('.panel'));
     });
 
     var clearShip = function(clearGroup) {
@@ -54,15 +54,48 @@
         return false; // don't also toggle visible
     });
 
+    var showNpcButtons = function() {
+        var panel = $('.panel.npc');
+        panel.css('visibility', 'hidden');
+        togglePanel(panel);
+        $('#npcbuttons').show();
+    };
 
     $body.on('click', '.clear-fleet-btn', function() {
-        var clearGroup = $(this).closest('.fleet').find('.clear-group');
+        var fleet = $(this).closest('.fleet');
+        var clearGroup = fleet.find('.clear-group');
         clearShip(clearGroup);
         clearGroup.find('.panel-body').slideUp();
+
+        if (fleet.hasClass('their_fleet'))
+            showNpcButtons();
     });
 
+    $body.on('click', '.npc .clear-btn', showNpcButtons);
+    $body.on('click', '.panel.npc .panel-heading', showNpcButtons);
+
+
     $body.on('click', '#npcbuttons .npc', function() {
-        var panel = $(this).closest('.panel.npc');
+        var panel = $('.panel.npc');
+
+        var npcs = {
+            'npc_ancientA': {'cannon_ion': 2, 'initiative': 2, 'computer': 1, 'hull': 1},
+            'npc_ancientB': {'cannon_plasma': 1, 'initiative': 1, 'computer': 1, 'hull': 2},
+            'npc_guardianA': {'cannon_ion': 3, 'computer': 2, 'initiative': 3, 'hull': 2},
+            'npc_guardianB': {'missile_plasma':2, 'cannon_antimatter': 1, 'computer': 1, 'hull': 3, 'initiative': 1},
+            'npc_gcdsA': {'cannon_ion': 4, 'computer': 2, 'hull': 7},
+            'npc_gcdsB': {'missile_ion': 4, 'cannon_antimatter': 1, 'computer': 2, 'hull': 3}
+        };
+        var npc = npcs[$(this).attr('id')];
+
+        panel.find('.active').data('value', 0).html('');
+        for (var property in npc) {
+            var a = panel.find('#battle_second_npc_' + property);
+            a.data('value', npc[property]);
+            a.html(npc[property])
+        }
+
+        panel.css('visibility', 'visible');
         togglePanel(panel);
         $('#npcbuttons').hide();
     });
@@ -286,7 +319,7 @@
 
 
     // Battle page
-    var shipTypes = ['interceptor','cruiser','dreadnought','starbase'],
+    var shipTypes = ['interceptor','cruiser','dreadnought','starbase','npc'],
         $battleRun = $('.battle_run'),
         $battleResult = $('#battle_result'),
         $battleResultAnchor = $('#battle_result_anchor'),
@@ -381,7 +414,7 @@
         html += '<thead><tr><th></th><th>Your Fleet</th><th>Their Fleet</th></tr></thead>';
         html += '<tbody>';
 
-        var stats = shipTypes.concat('res lost', '% res lost');
+        var stats = shipTypes.concat('mat lost', 'mat lost %');
         for (var i in stats) {
             html += '<tr>' +
             '<td>' + capitalize(stats[i]) + '</td>' +
@@ -605,7 +638,8 @@
             this.resources = this.type === 'interceptor' && 3
                             || this.type === 'cruiser' && 5
                             || this.type === 'dreadnought' && 8
-                            || this.type === 'starbase' && 3;
+                            || this.type === 'starbase' && 3
+                            || 1;
             return this;
         };
 
@@ -821,6 +855,20 @@
     }
     Starbase.prototype = new Ship;
 
+    function Npc(attrs) {
+        var self = this;
+
+        self.default = {
+        };
+
+        self.type = 'npc';
+
+        self.potency = 1;
+
+        self.init(attrs);
+    }
+    Npc.prototype = new Ship;
+
     function Fleet(attrs) {
         var self = this;
 
@@ -858,6 +906,10 @@
             for (i = 0, ii = attrs.starbase.number || 0; i < ii; ++i) {
                 self.ships.push(new Starbase(attrs.starbase));
             }
+            for (i = 0, ii = attrs.npc.number || 0; i < ii; ++i) {
+                self.ships.push(new Npc(attrs.npc));
+            }
+
 
             self.shipsByInitiative = new ArrayCollection();
             self.shipsByPotency = new ArrayCollection();
@@ -1017,9 +1069,8 @@
 
         self.endFireRound = function() {
             this.getShips().eachAlive(function(ship) {
-                if (ship.regen) {
-                    ship.damage -= ship.regen;
-                }
+                if (ship.regen)
+                    ship.damage = Math.max(0, ship.damage - ship.regen);
             });
         };
 
@@ -1152,7 +1203,7 @@
 
         }
 
-        var stats = ['interceptor', 'cruiser', 'dreadnought', 'starbase', 'res lost', '% res lost'];
+        var stats = ['interceptor', 'cruiser', 'dreadnought', 'starbase', 'npc', 'mat lost', 'mat lost %'];
         var totalResources = []; // total resource cost of each fleet
         var results = {
             winner: {0: 0, 1: 0, 2: 0, '-1': 0},
@@ -1168,7 +1219,7 @@
 
             for (var s = 0; s < stats.length; s++)
                 results.fleets[f][stats[s]] = 0;
-            results.fleets[f]['% res lost'] = new Array(count);
+            results.fleets[f]['mat lost %'] = new Array(count);
         }
 
         for (var i = 0, result; i < count; ++i) {
@@ -1185,8 +1236,8 @@
                 fleets[f].getShips().eachDead(function(ship) {
                     resLost += ship.resources;
                 });
-                results.fleets[f]['res lost'] += resLost;
-                results.fleets[f]['% res lost'][i] = resLost / totalResources[f];
+                results.fleets[f]['mat lost'] += resLost;
+                results.fleets[f]['mat lost %'][i] = resLost / totalResources[f];
             }
 
         }
@@ -1196,13 +1247,13 @@
                 var fleetResults = results.fleets[fr];
 
                 // change resources from an array of results to "N.NN +/- N.NN"
-                var avg = average(fleetResults['% res lost']);
-                var sd = stddev(fleetResults['% res lost'], avg);
-                fleetResults['% res lost'] = Math.round(avg*100, 1) + '% +/- ' + Math.round(sd*100,1) + '%';
+                var avg = average(fleetResults['mat lost %']);
+                var sd = stddev(fleetResults['mat lost %'], avg);
+                fleetResults['mat lost %'] = Math.round(avg*100, 1) + '% +/- ' + Math.round(sd*100,1) + '%';
 
                 // average all other stats
                 for (var s = 0; s < stats.length; s++)
-                    if (stats[s] !== '% res lost')
+                    if (stats[s] !== 'mat lost %')
                         fleetResults[stats[s]] = round(fleetResults[stats[s]] / count, 2);
 
             }
@@ -1246,6 +1297,8 @@
                 ships += 'd';
             else if (ship.type === 'starbase')
                 ships += 's';
+            else if (ship.type === 'npc')
+                ships += 'n';
 
             for (var d = 0; d < ship.damage; d++)
                 ships += '*';
@@ -1254,11 +1307,9 @@
         console.log(ships);
     }
 
-    function logFleets(first, second, damages) {
-        if (damages.count()) {
-            logFleet(first);
-            logFleet(second);
-        }
+    function logFleets(first, second) {
+        logFleet(first);
+        logFleet(second);
     }
 
     function groupString(action) {
@@ -1272,8 +1323,7 @@
     }
 
     function logDice(action, damages, morc) {
-        if (damages.count())
-            console.log(groupString(action) + ' roll '+morc+': ' + diceString(damages));
+        console.log(groupString(action) + ' roll '+morc+': ' + diceString(damages));
     }
 
     function calcBattle(firstFleet, secondFleet, order, log) {
@@ -1290,10 +1340,10 @@
         for (var i = 0, ii = order.length; i < ii; ++i) {
             action = order[i];
             damages = action.ships.fireMissiles(action.fireFleet);
-            log && logDice(action, damages, 'missiles');
+            var rolled = damages.count(); log && rolled && logDice(action, damages, 'missiles');
 
             action.catchFleet.putDamagesMissiles(damages);
-            log && logFleets(firstFleet, secondFleet, damages);
+            log && rolled && logFleets(firstFleet, secondFleet);
         }
 
         if ((result = battleResult(firstFleet, secondFleet)) >= 0) {
@@ -1311,11 +1361,11 @@
                         continue;
 
                     damages = action.ships.fireCannons(action.fireFleet);
-                    log && logDice(action, damages, 'cannons');
+                    var rolled = damages.count(); log && rolled && logDice(action, damages, 'cannons');
 
                     action.fireFleet.putBackfires(damages);
                     action.catchFleet.putDamages(damages);
-                    log && logFleets(firstFleet, secondFleet, damages);
+                    log && rolled && logFleets(firstFleet, secondFleet);
 
                     if ((result = battleResult(firstFleet, secondFleet)) >= 0) {
                         log && console.log('fleet '+result+' wins');
