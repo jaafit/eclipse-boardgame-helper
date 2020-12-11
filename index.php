@@ -239,7 +239,7 @@ function npcImg($name) {
 }
 
 function npcShip() {
-    return '<div id="npcbuttons">'
+    return '<div id="npcbuttons" class="panel">'
             .npcImg('ancientA')
             .npcImg('ancientB')
             .npcImg('guardianA')

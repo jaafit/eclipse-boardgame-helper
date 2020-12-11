@@ -56,8 +56,8 @@
 
     var showNpcButtons = function() {
         var panel = $('.panel.npc');
-        panel.css('visibility', 'hidden');
-        togglePanel(panel);
+        panel.find('.panel-body').slideUp();
+        panel.hide();
         $('#npcbuttons').show();
     };
 
@@ -95,7 +95,7 @@
             a.html(npc[property])
         }
 
-        panel.css('visibility', 'visible');
+        panel.show();
         togglePanel(panel);
         $('#npcbuttons').hide();
     });
