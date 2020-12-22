@@ -14,8 +14,9 @@
 <nav class="navbar navbar-default" role="navigation">
 	<ul class="nav navbar-nav">
         <li class="active"><a href="#battle" data-toggle="tab">Battle</a></li>
-		<li><a href="#cannons" data-toggle="tab">Hit Odds</a></li>
-		<li><a href="#dice" data-toggle="tab">Roll Dice</a></li>
+        <li><a href="#reputation" data-toggle="tab">Rep</a></li>
+		<li><a href="#cannons" data-toggle="tab">Odds</a></li>
+		<li><a href="#dice" data-toggle="tab">Dice</a></li>
 		<li><a href="#races" data-toggle="tab">Races</a></li>
         <li><a href="#about" data-toggle="tab">About</a></li>
 	</ul>
@@ -74,6 +75,51 @@
             <div class="row battle-result" id="battle_result"><i>Click "Run Battle" to get results</i></div>
         </div>
         <!-- /BATTLE -->
+
+        <!-- REPUTATION -->
+        <div class="tab-pane" id="reputation">
+            <div class="row">
+                <?= counter('reputation_spaces', 4, '', 4, true, 'Your Rep Spaces') ?>
+                <?= counter('reputation_players', 4, '', 4, true, 'Player Count') ?>
+                <?= counter('reputation_spaces_opponents', 4, '', 4, true, 'Their Rep Spaces') ?>
+            </div>
+            <div class="row">
+
+            </div>
+            <div class="row">
+                <h2>Your Tiles per Draw</h2>
+            </div>
+            <div class="row">
+                <?= counter('round_1_draw', 1, '', 0, false, '1') ?>
+                <?= counter('round_2_draw', 1, '', 2, false, '2') ?>
+                <?= counter('round_3_draw', 1, '', 2, false, '3') ?>
+                <?= counter('round_4_draw', 1, '', 3, false, '4') ?>
+                <?= counter('round_5_draw', 1, '', 3, false, '5') ?>
+                <?= counter('round_6_draw', 1, '', 4, false, '6') ?>
+                <?= counter('round_7_draw', 1, '', 4, false, '7') ?>
+                <?= counter('round_8_draw', 1, '', 0, false, '8') ?>
+            </div>
+            <div class="row">
+                <h2>Opponent Tiles per Draw</h2>
+            </div>
+            <div class="row">
+                <?= counter('round_1_draw_opponents', 1, '', 0, false, '1') ?>
+                <?= counter('round_2_draw_opponents', 1, '', 2, false, '2') ?>
+                <?= counter('round_3_draw_opponents', 1, '', 2, false, '3') ?>
+                <?= counter('round_4_draw_opponents', 1, '', 3, false, '4') ?>
+                <?= counter('round_5_draw_opponents', 1, '', 3, false, '5') ?>
+                <?= counter('round_6_draw_opponents', 1, '', 4, false, '6') ?>
+                <?= counter('round_7_draw_opponents', 1, '', 4, false, '7') ?>
+                <?= counter('round_8_draw_opponents', 1, '', 0, false, '8') ?>
+            </div>
+
+            <div class="row">
+                <button id="simulate_rep" class="btn btn-lg btn-primary col-xs-12">Simulate Draws</button>
+            </div>
+
+            <div id="reputation_result"></div>
+        </div>
+        <!-- /REPUTATION -->
 
         <!-- CANNONS -->
 		<div class="tab-pane" id="cannons">

@@ -22,15 +22,14 @@
             $value = $(this).find('.game-counter-value'),
             value = parseInt($value.data('value')),
             list = $(this).data('list') ? $(this).data('list').split(',') : [];
-        if ($target.hasClass('game-counter-plus')) {
-            value++;
-        } else if ($target.hasClass('game-counter-minus')) {
-            value--;
-        }
-        if ($(this).hasClass('negative'))
-            value = Math.min(0, value);
-        else
-            value = Math.max(0, value);
+
+        var negative = $(this).hasClass('negative');
+        if ($target.hasClass('game-counter-plus'))
+            value += negative ? -1 : 1;
+        else if ($target.hasClass('game-counter-minus'))
+            value += negative ? 1 : -1;
+        value = negative ? Math.min(0, value) : Math.max(0, value);
+
         $value.data('value', value);
         $value.html(list.length ? list[value] : (value || ''));
     });
@@ -141,6 +140,33 @@
         battleSideSelectorActive = false;
     });
 
+
+    // Reputation page
+    $('#simulate_rep').on('click', function() {
+        var opponents = $('#reputation_players').data('value') - 1;
+        var repSpaces = $('#reputation_spaces').data('value');
+        var repSpacesOpponents = $('#reputation_spaces_opponents').data('value');
+        var draws = [];
+        var opponentDraws = [];
+        for (var i = 1; i <= 8; i++) {
+            draws.push($("#round_"+i+"_draw").data('value'));
+            opponentDraws.push($("#round_"+i+"_draw_opponents").data('value'));
+        }
+        console.log(draws, opponentDraws);
+
+        var results = simulateRep(repSpaces, repSpacesOpponents, opponents, draws, opponentDraws);
+
+        var yours = round(results.yourRep, 2);
+        var theirs = round(results.theirRep, 2);
+        var diff = round(yours - theirs, 2);
+        $("#reputation_result").html(
+            '<h3>Your Avg Rep Points: ' + yours + '</h3>'
+            + '<h3>Their Avg Rep Points: ' + theirs + '</h3>'
+            + '<h3>Difference: ' + diff + ' Points</h3>'
+        )
+
+
+    });
 
     // Cannons page
     $('#cannons_calc').on('click', function(){
@@ -318,7 +344,12 @@
     }
 
 
-    // Battle page
+
+
+
+
+
+    // BATTLE CODE
     var shipTypes = ['interceptor','cruiser','dreadnought','starbase','npc'],
         $battleRun = $('.battle_run'),
         $battleResult = $('#battle_result'),
@@ -1383,6 +1414,95 @@
         return result;
     }
 
+    function simulateRep(repSpaces, repSpacesOpponents, opponents, yourDraws, opponentDraws) {
+
+        var totalRep = [];
+        for (var r = 0; r < opponents + 1; r++)
+            totalRep[r] = 0;
+        var trials = 5000;
+        for (var t = 0; t < trials; t++) {
+            var counts = [0, 12, 10, 7, 4];
+            var tiles = [];
+            for (var value = 0; value <= 4; value++)
+                for (var i = 0; i < counts[value]; i++)
+                    tiles.push(value);
+
+            // initialize spaces
+            var players = [];
+            // player[0] is our player
+            for (var p = 0; p < opponents + 1; p++) {
+                players.push([])
+                var spaces = (p === 0) ? repSpaces : repSpacesOpponents;
+                for (var s = 0; s < spaces; s++)
+                    players[p].push(0)
+            }
+
+            for (var round = 0; round <= 7; round++) {
+
+                // establish a random draw order this round
+                var order = [];
+                for (p = 0; p < players.length; p++)
+                    order.push(p);
+                order = shuffle(order);
+
+                for (var o = 0; o < order.length; o++) {
+                    p = order[o];
+
+                    tiles = shuffle(tiles);
+                    var draws = (p === 0) ? yourDraws[round] : opponentDraws[round];
+
+                    if (draws === 0 || tiles.length === 0)
+                        continue;
+
+                    var best = -1;
+                    for (var d = 0; d < draws && d < tiles.length; d++)
+                        if (best === -1 || tiles[d] > tiles[best])
+                            best = d;
+
+                    // log
+                    if (t === 0) {
+                        var drawString = '';
+                        for (d = 0; d < draws && d < tiles.length; d++)
+                            drawString += tiles[d]
+                        console.log('Player ' + p + ' draws ' + draws + ': ' + drawString)
+                    }
+
+                    // better than what player has?
+                    var worst = -1;
+                    for (var h = 0; h < players[p].length; h++)
+                        if (worst === -1 || players[p][h] < players[p][worst])
+                            worst = h;
+
+                    if (worst >= 0 && tiles[best] > players[p][worst])
+                        players[p][worst] = tiles.splice(best, 1)[0];
+
+
+                    // log
+                    if (t === 0) {
+                        var repString = '';
+                        for (var z = 0; z < players[p].length; z++)
+                            repString += players[p][z];
+                        console.log('... and now has '+repString + '.  ' + tiles.length + ' tiles left.');
+                    }
+                }
+            }
+
+            for (p = 0; p < players.length; p++)
+                for (var r = 0; r < players[p].length; r++)
+                    totalRep[p] += players[p][r];
+        }
+
+        for (p = 0; p < players.length; p++)
+            totalRep[p] /= trials;
+        console.log(totalRep);
+
+        var totalOpponentRep = 0;
+        for (p = 1; p < players.length; p++)
+            totalOpponentRep += totalRep[p];
+
+        return {yourRep: totalRep[0], theirRep: totalOpponentRep / opponents};
+    }
+
 
     // Helpers functions
     function average(a) { return a.reduce(function(a, b) { return a + b;}, 0) / a.length }
@@ -1407,6 +1527,16 @@
     }
     function def(v,d) { return v !== undefined ? v : d; }
     function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+    function shuffle(a) {
+        var j, x, i;
+        for (i = a.length - 1; i > 0; i--) {
+            j = Math.floor(Math.random() * (i + 1));
+            x = a[i];
+            a[i] = a[j];
+            a[j] = x;
+        }
+        return a;
+    }
 
     function diceTest(limit) {
         var result = {}, i;

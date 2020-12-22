@@ -27,7 +27,20 @@ Algorithm will simulate that number of battles and display average statistics.
 
 After selecting all parameters, press "Run Battle" to get results.
 
-# Hit Odds
+# Rep
+
+Calculate the average point value of your reputation tiles compared to your opponents.
+
+* **Your Rep Spaces:** How many spaces there are for reputation on your board.
+* **Player Count:** How many players are playing (including you).
+* **Their Rep Spaces:** How many spaces there are for reputation on your opponents' boards.
+* **Your Tiles per Draw:** How many tiles you draw when you draw tiles.
+* **Opponent Tiles per Draw:** How many tiles opponents draw when they draw tiles.
+
+The "Tiles per Draw" fields are split into 8 seperate draws, but these don't necessarily correspond to the 8 rounds of the game.  They simply give you a way to simulate drawing early vs late.
+For each of the 8 draws, the order between players drawing is randomized.
+
+# Odds
 
 Calculate the probability of hits to the opponent.
 Select number of cannons or missiles and set bonus. Press "Calc" to get results.
@@ -41,7 +54,7 @@ Types of counter:
 * Rift (violet) - number of rift cannons 
 * Bonus (white) - bonus of computers, considering opponent's shields
 
-# Roll Dice
+# Dice
 
 Simulate a throw of dice.
 Select number of dice of each color. Press "Throw" to get results.
